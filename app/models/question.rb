@@ -1,5 +1,5 @@
 class Question < ApplicationRecord
-  validates_presence_of :title
-  validates_presence_of :body
+  validates :title, presence: true
+  validates :body,  presence: true
   has_many :answers
 end

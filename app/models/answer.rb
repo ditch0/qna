@@ -1,4 +1,4 @@
 class Answer < ApplicationRecord
-  validates_presence_of :body
+  validates :body, presence: true
   belongs_to :question
 end
