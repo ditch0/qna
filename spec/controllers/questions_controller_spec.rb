@@ -13,6 +13,19 @@ RSpec.describe QuestionsController, type: :controller do
     end
   end
 
+  describe 'GET #show' do
+    let(:question) { create(:question) }
+    before { get :show, params: { id: question.id } }
+
+    it 'renders index view' do
+      expect(response).to render_template(:show)
+    end
+
+    it 'assigns @question' do
+      expect(assigns(:question)).to eq(question)
+    end
+  end
+
   describe 'GET #new' do
     before  { get :new }
 
