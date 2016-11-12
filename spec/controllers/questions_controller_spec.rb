@@ -40,7 +40,7 @@ RSpec.describe QuestionsController, type: :controller do
     end
 
     context 'invalid question' do
-      it 'does not new question in database' do
+      it 'does not create new question in database' do
         expect do
           post 'create', params: { question: attributes_for(:invalid_question) }
         end.not_to change(Question, :count)
