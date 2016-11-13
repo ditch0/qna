@@ -35,7 +35,7 @@ RSpec.describe AnswersController, type: :controller do
       it 'does not create answer in database' do
         expect do
           post :create, params: answer_params
-        end.not_to change(question.answers, :count)
+        end.not_to change(Answer, :count)
       end
 
       it 'renders new view' do
