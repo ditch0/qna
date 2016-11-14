@@ -1,0 +1,13 @@
+h2= @question.title
+p= @question.body
+h3 Answers
+- @question.answers.each do |answer|
+  p
+    = answer.body
+
+= form_for(@answer, url: question_answers_path(@question), method: :post) do |f|
+  p
+    = f.label :body, 'Your answer'
+    = f.text_area :body
+  p
+    = f.submit 'Submit'
