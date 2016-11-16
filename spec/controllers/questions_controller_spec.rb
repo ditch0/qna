@@ -46,13 +46,13 @@ RSpec.describe QuestionsController, type: :controller do
 
     describe 'POST #create' do
       it 'redirects to login page' do
-        post 'create', params: { question: attributes_for(:question) }
+        post :create, params: { question: attributes_for(:question) }
         expect(response).to redirect_to(new_user_session_url)
       end
 
       it 'does not create new question in database' do
         expect do
-          post 'create', params: { question: attributes_for(:question) }
+          post :create, params: { question: attributes_for(:question) }
         end.not_to change(Question, :count)
       end
     end
@@ -93,12 +93,12 @@ RSpec.describe QuestionsController, type: :controller do
       context 'valid question' do
         it 'creates new question in database' do
           expect do
-            post 'create', params: { question: attributes_for(:question) }
+            post :create, params: { question: attributes_for(:question) }
           end.to change(Question, :count).by(1)
         end
 
         it 'redirects to questions list' do
-          post 'create', params: { question: attributes_for(:question) }
+          post :create, params: { question: attributes_for(:question) }
           expect(response).to redirect_to(questions_url)
         end
       end
@@ -106,12 +106,12 @@ RSpec.describe QuestionsController, type: :controller do
       context 'invalid question' do
         it 'does not create new question in database' do
           expect do
-            post 'create', params: { question: attributes_for(:invalid_question) }
+            post :create, params: { question: attributes_for(:invalid_question) }
           end.not_to change(Question, :count)
         end
 
         it 'renders new view' do
-          post 'create', params: { question: attributes_for(:invalid_question) }
+          post :create, params: { question: attributes_for(:invalid_question) }
           expect(response).to render_template(:new)
         end
       end
