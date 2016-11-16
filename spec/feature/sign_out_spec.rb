@@ -6,7 +6,6 @@ feature 'Sign out' do
 
   scenario 'user signs out' do
     click_on 'Sign out'
-    save_and_open_page
     expect(page).to have_content('Signed out successfully.')
   end
 end
