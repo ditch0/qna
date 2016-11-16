@@ -8,6 +8,8 @@ h3 Answers
 - @question.answers.each do |answer|
   p
     = answer.body
+    - if user_signed_in? && answer.user == current_user
+      = button_to 'Delete answer', question_answer_path(answer.question, answer), method: :delete
 
 - if user_signed_in?
   = form_for(@answer, url: question_answers_path(@question), method: :post) do |f|

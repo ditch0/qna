@@ -26,6 +26,21 @@ RSpec.describe AnswersController, type: :controller do
         end.not_to change(Answer, :count)
       end
     end
+
+    describe 'DELETE #destroy' do
+      let!(:answer) { create(:answer) }
+
+      it 'redirects to login page' do
+        delete :destroy, params: { id: answer.id, question_id: answer.question.id }
+        expect(response).to redirect_to(new_user_session_url)
+      end
+
+      it 'does not create new answer in database' do
+        expect do
+          delete :destroy, params: { id: answer.id, question_id: answer.question.id }
+        end.not_to change(Answer, :count)
+      end
+    end
   end
 
   context 'authenticated user' do
@@ -69,6 +84,40 @@ RSpec.describe AnswersController, type: :controller do
         it 'renders new view' do
           post :create, params: answer_params
           expect(response).to render_template(:new)
+        end
+      end
+    end
+
+    describe 'DELETE #destroy' do
+      context 'own answer' do
+        let!(:answer) { create(:answer, user: @user) }
+
+        it 'redirects to question page' do
+          delete :destroy, params: { id: answer.id, question_id: answer.question.id }
+          expect(response).to redirect_to(question_url(answer.question))
+          expect(flash[:notice]).to eq('Answer is deleted.')
+        end
+
+        it 'deletes answer in database' do
+          expect do
+            delete :destroy, params: { id: answer.id, question_id: answer.question.id }
+          end.to change(Answer, :count).by(-1)
+        end
+      end
+
+      context 'other user\'s answer' do
+        let!(:answer) { create(:answer) }
+
+        it 'redirects to question page' do
+          delete :destroy, params: { id: answer.id, question_id: answer.question.id }
+          expect(response).to redirect_to(question_url(answer.question))
+          expect(flash[:alert]).to eq('Not allowed.')
+        end
+
+        it 'does not delete answer in database' do
+          expect do
+            delete :destroy, params: { id: answer.id, question_id: answer.question.id }
+          end.not_to change(Answer, :count)
         end
       end
     end
