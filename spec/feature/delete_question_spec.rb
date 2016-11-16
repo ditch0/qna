@@ -21,7 +21,9 @@ feature 'User can delete question' do
   end
 
   scenario 'authorized user cannot delete other users question' do
+    sign_in user
     visit question_path(other_users_question)
+
     expect(page).not_to have_button('Delete question')
   end
 end
