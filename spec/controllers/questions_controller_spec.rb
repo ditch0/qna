@@ -45,10 +45,11 @@ RSpec.describe QuestionsController, type: :controller do
     end
 
     describe 'POST #create' do
-      it 'redirects to questions list' do
+      it 'redirects to login page' do
         post 'create', params: { question: attributes_for(:question) }
         expect(response).to redirect_to(new_user_session_url)
       end
+
       it 'does not create new question in database' do
         expect do
           post 'create', params: { question: attributes_for(:question) }
