@@ -15,12 +15,12 @@ feature 'User can delet question' do
     expect(page).to have_content('Question is deleted.')
   end
 
-  scenario 'unauthorized user cannon delete question' do
+  scenario 'unauthorized user cannot delete question' do
     visit question_path(own_question)
     expect(page).not_to have_button('Delete question')
     end
 
-  scenario 'authorized user cannon delete other users question' do
+  scenario 'authorized user cannot delete other users question' do
     visit question_path(other_users_question)
     expect(page).not_to have_button('Delete question')
   end
