@@ -134,7 +134,7 @@ RSpec.describe QuestionsController, type: :controller do
         end
       end
 
-      context 'other user question question' do
+      context 'other user\' question' do
         let!(:question) { create(:question) }
 
         it 'redirects to question page' do
@@ -149,7 +149,6 @@ RSpec.describe QuestionsController, type: :controller do
           end.not_to change(Question, :count)
         end
       end
-
     end
   end
 end
