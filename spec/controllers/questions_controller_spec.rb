@@ -56,6 +56,21 @@ RSpec.describe QuestionsController, type: :controller do
         end.not_to change(Question, :count)
       end
     end
+
+    describe 'DELETE #destroy' do
+      let!(:question) { create(:question) }
+
+      it 'redirects to login page' do
+        delete :destroy, params: { id: question.id }
+        expect(response).to redirect_to(new_user_session_url)
+      end
+
+      it 'does not create new question in database' do
+        expect do
+          delete :destroy, params: { id: question.id }
+        end.not_to change(Question, :count)
+      end
+    end
   end
 
   context 'authenticated user' do
@@ -100,6 +115,41 @@ RSpec.describe QuestionsController, type: :controller do
           expect(response).to render_template(:new)
         end
       end
+    end
+
+    describe 'DELETE #destroy' do
+      context 'own question' do
+        let!(:question) { create(:question, user: @user) }
+
+        it 'redirects to question list' do
+          delete :destroy, params: { id: question.id }
+          expect(response).to redirect_to(questions_url)
+          expect(flash[:notice]).to eq('Question is deleted.')
+        end
+
+        it 'deletes question in database' do
+          expect do
+            delete :destroy, params: { id: question.id }
+          end.to change(Question, :count).by(-1)
+        end
+      end
+
+      context 'other user question question' do
+        let!(:question) { create(:question) }
+
+        it 'redirects to question page' do
+          delete :destroy, params: { id: question.id }
+          expect(response).to redirect_to(question_url(question))
+          expect(flash[:alert]).to eq('Not allowed.')
+        end
+
+        it 'does not delete question in database' do
+          expect do
+            delete :destroy, params: { id: question.id }
+          end.not_to change(Question, :count)
+        end
+      end
+
     end
   end
 end

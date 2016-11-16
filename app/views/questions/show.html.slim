@@ -1,5 +1,9 @@
 h2= @question.title
 p= @question.body
+- if user_signed_in? && @question.user == current_user
+  p
+    = button_to 'Delete question', question_path(@question), method: :delete
+
 h3 Answers
 - @question.answers.each do |answer|
   p
