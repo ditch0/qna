@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-feature 'User can delet question' do
+feature 'User can delete question' do
   given!(:user) { create(:user) }
   given!(:own_question) { create(:question, user: user) }
   given!(:other_users_question) { create(:question, user: create(:user)) }
