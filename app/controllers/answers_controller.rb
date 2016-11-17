@@ -38,7 +38,7 @@ class AnswersController < ApplicationController
   end
 
   def ensure_current_user_is_answer_owner
-    unless @answer.user == current_user
+    unless @answer.user_id == current_user.id
       redirect_to @answer.question, alert: 'Not allowed.'
     end
   end
