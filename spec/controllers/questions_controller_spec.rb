@@ -97,6 +97,11 @@ RSpec.describe QuestionsController, type: :controller do
           end.to change(Question, :count).by(1)
         end
 
+        it 'creates answer owned by current user' do
+          post :create, params: { question: attributes_for(:question) }
+          expect(Question.last.user_id).to eq(@user.id)
+        end
+
         it 'redirects to questions list' do
           post :create, params: { question: attributes_for(:question) }
           expect(response).to redirect_to(questions_url)

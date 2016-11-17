@@ -61,10 +61,16 @@ RSpec.describe AnswersController, type: :controller do
     describe 'POST #create' do
       context 'valid answer' do
         let(:answer_params) { { answer: attributes_for(:answer), question_id: question } }
+
         it 'creates answer in database' do
           expect do
             post :create, params: answer_params
           end.to change(question.answers, :count).by(1)
+        end
+
+        it 'creates answer owned by current user' do
+          post :create, params: answer_params
+          expect(Answer.last.user_id).to eq(@user.id)
         end
 
         it 'redirects to question page' do
@@ -75,6 +81,7 @@ RSpec.describe AnswersController, type: :controller do
 
       context 'invalid answer' do
         let(:answer_params) { { answer: attributes_for(:invalid_answer), question_id: question } }
+
         it 'does not create answer in database' do
           expect do
             post :create, params: answer_params
