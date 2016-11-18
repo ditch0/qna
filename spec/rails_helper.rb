@@ -9,7 +9,6 @@ require 'shoulda_matchers_helper'
 require 'capybara/poltergeist'
 
 Capybara.javascript_driver = :poltergeist
-Capybara.default_driver = :poltergeist
 
 # Add additional requires below this line. Rails is not loaded until this point!
 
@@ -74,7 +73,7 @@ RSpec.configure do |config|
     DatabaseCleaner.strategy = :transaction
   end
 
-  config.before(:each, type: :feature) do
+  config.before(:each, js: :true) do
     DatabaseCleaner.strategy = :truncation
   end
 

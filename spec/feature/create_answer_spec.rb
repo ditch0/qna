@@ -4,7 +4,7 @@ feature 'User can answer a question' do
   given!(:question) { create(:question) }
   given!(:user) { create(:user) }
 
-  scenario 'authorized user creates answer' do
+  scenario 'authorized user creates answer', js: true do
     sign_in user
     visit question_path(question)
     fill_in 'Your answer', with: 'My answer'
