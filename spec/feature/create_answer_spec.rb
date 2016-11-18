@@ -11,7 +11,9 @@ feature 'User can answer a question' do
     click_on 'Submit'
 
     expect(page).to have_current_path(question_path(question))
-    expect(page).to have_content('My answer')
+    within '.answers' do
+      expect(page).to have_content('My answer')
+    end
   end
 
   scenario 'unauthorized user cannot see answer form' do
