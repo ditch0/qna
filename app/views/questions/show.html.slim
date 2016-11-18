@@ -12,7 +12,7 @@ h3 Answers
       = button_to 'Delete answer', question_answer_path(answer.question, answer), method: :delete
 
 - if user_signed_in?
-  = form_for(@answer, url: question_answers_path(@question), method: :post) do |f|
+  = form_for [@question, @answer] do |f|
     p
       = f.label :body, 'Your answer'
       = f.text_area :body
