@@ -64,18 +64,18 @@ RSpec.describe AnswersController, type: :controller do
 
         it 'creates answer in database' do
           expect do
-            post :create, params: answer_params
+            post :create, params: answer_params, xhr: true
           end.to change(question.answers, :count).by(1)
         end
 
         it 'creates answer owned by current user' do
-          post :create, params: answer_params
+          post :create, params: answer_params, xhr: true
           expect(Answer.last.user_id).to eq(@user.id)
         end
 
-        it 'redirects to question page' do
-          post :create, params: answer_params
-          expect(response).to redirect_to(question)
+        it 'renders create template' do
+          post :create, params: answer_params, xhr: true
+          expect(response).to render_template(:create)
         end
       end
 
@@ -84,13 +84,13 @@ RSpec.describe AnswersController, type: :controller do
 
         it 'does not create answer in database' do
           expect do
-            post :create, params: answer_params
+            post :create, params: answer_params, xhr: true
           end.not_to change(Answer, :count)
         end
 
-        it 'renders new view' do
-          post :create, params: answer_params
-          expect(response).to render_template(:new)
+        it 'renders create view' do
+          post :create, params: answer_params, xhr: true
+          expect(response).to render_template(:create)
         end
       end
     end
