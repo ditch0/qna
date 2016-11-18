@@ -14,6 +14,7 @@ feature 'User can answer a question' do
     within '.answers' do
       expect(page).to have_content('My answer')
     end
+    expect(find_field('Your answer')).to have_attributes(value: '')
   end
 
   scenario 'unauthorized user cannot see answer form' do
