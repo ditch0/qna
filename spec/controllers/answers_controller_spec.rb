@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe AnswersController, type: :controller do
-  let(:question) { question = create(:question) }
+  let(:question) { create(:question) }
 
   context 'guest user' do
     describe 'GET #new' do
