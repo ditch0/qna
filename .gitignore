@@ -26,3 +26,5 @@
 **/.DS_Store
 
 /config/database.yml
+
+/.rubocop_todo.yml
