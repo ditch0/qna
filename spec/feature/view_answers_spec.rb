@@ -1,4 +1,4 @@
-require 'rails_helper'
+require_relative 'feature_helper'
 
 feature 'User can view answers to question' do
   given!(:question) { create(:question_with_answers) }

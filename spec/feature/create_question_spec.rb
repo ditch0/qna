@@ -1,4 +1,4 @@
-require 'rails_helper'
+require_relative 'feature_helper'
 
 feature 'User can create question' do
   given!(:question) { attributes_for(:question) }

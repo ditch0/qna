@@ -1,4 +1,4 @@
-require 'rails_helper'
+require_relative 'feature_helper'
 
 feature 'User can view list of questions' do
   given!(:questions) { create_list(:question, 3) }

@@ -1,4 +1,4 @@
-require 'rails_helper'
+require_relative 'feature_helper'
 
 feature 'User registration' do
   given(:user) { attributes_for(:user) }
