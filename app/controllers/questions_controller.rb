@@ -45,8 +45,7 @@ class QuestionsController < ApplicationController
   end
 
   def ensure_current_user_is_question_owner
-    unless @question.user_id == current_user.id
-      redirect_to @question, alert: 'Not allowed.'
-    end
+    return if @question.user_id == current_user.id
+    redirect_to @question, alert: 'Not allowed.'
   end
 end

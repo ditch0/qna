@@ -1,7 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe QuestionsController, type: :controller do
-
   shared_examples 'public access to question' do
     describe 'GET #index' do
       before { get :index }
