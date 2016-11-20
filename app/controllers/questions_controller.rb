@@ -1,7 +1,7 @@
 class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: [:index, :show]
-  before_action :set_question, only: [:show, :destroy]
-  before_action :ensure_current_user_is_question_owner, only: [:destroy]
+  before_action :set_question, only: [:show, :destroy, :update]
+  before_action :ensure_current_user_is_question_owner, only: [:destroy, :update]
 
   def index
     @questions = Question.all
@@ -34,6 +34,10 @@ class QuestionsController < ApplicationController
     end
   end
 
+  def update
+    @question.update(question_params)
+  end
+
   private
 
   def question_params
@@ -46,6 +50,9 @@ class QuestionsController < ApplicationController
 
   def ensure_current_user_is_question_owner
     return if @question.user_id == current_user.id
-    redirect_to @question, alert: 'Not allowed.'
+    respond_to do |format|
+      format.html { redirect_to @question, alert: 'Not allowed.' }
+      format.js { head :forbidden }
+    end
   end
 end

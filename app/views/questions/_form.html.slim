@@ -1,0 +1,10 @@
+= form_for question, remote: remote, html: { class: 'question-form' } do |f|
+  div.errors
+  p
+    = f.label :title
+    = f.text_field :title
+  p
+    = f.label :body, 'Text'
+    = f.text_area :body
+  p
+    = f.submit(question.new_record? ? 'Create' : 'Save')

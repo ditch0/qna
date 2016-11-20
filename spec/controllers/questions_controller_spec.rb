@@ -70,6 +70,29 @@ RSpec.describe QuestionsController, type: :controller do
         end.not_to change(Question, :count)
       end
     end
+
+    describe 'PATCH #update' do
+      let!(:question) { create(:question) }
+
+      it 'return 401 Unauthorized' do
+        patch :update, params: { id: question.id, question: attributes_for(:question) }, xhr: true
+        expect(response).to have_http_status(401)
+      end
+
+      it 'does not update question title in database' do
+        expect do
+          patch :update, params: { id: question.id, question: attributes_for(:question) }, xhr: true
+          question.reload
+        end.not_to change(question, :title)
+      end
+
+      it 'does not update question body in database' do
+        expect do
+          patch :update, params: { id: question.id, question: attributes_for(:question) }, xhr: true
+          question.reload
+        end.not_to change(question, :body)
+      end
+    end
   end
 
   context 'authenticated user' do
@@ -151,6 +174,83 @@ RSpec.describe QuestionsController, type: :controller do
           expect do
             delete :destroy, params: { id: question.id }
           end.not_to change(Question, :count)
+        end
+      end
+    end
+
+    describe 'PATCH #update' do
+      context 'own question with valid attributes' do
+        let!(:question) { create(:question, user: @user) }
+        let!(:update_attributes) { attributes_for(:question) }
+
+        before do
+          patch :update, params: { id: question.id, question: update_attributes }, xhr: true
+        end
+
+        it 'renders update view' do
+          expect(response).to render_template(:update)
+        end
+
+        it 'assigns updated question' do
+          question.reload
+          expect(assigns(:question)).to have_attributes(update_attributes.slice(:title, :body))
+        end
+
+        it 'updates question in database' do
+          question.reload
+          expect(question).to have_attributes(update_attributes.slice(:title, :body))
+        end
+      end
+
+      context 'own question with invalid attributes' do
+        let!(:question) { create(:question, user: @user) }
+        let!(:update_attributes) { attributes_for(:question, title: '') }
+
+        it 'renders update view' do
+          patch :update, params: { id: question.id, question: update_attributes }, xhr: true
+          expect(response).to render_template(:update)
+        end
+
+        it 'assigns question with errors' do
+          patch :update, params: { id: question.id, question: update_attributes }, xhr: true
+          expect(assigns(:question).errors.present?).to be_truthy
+        end
+
+        it 'does not update question title in database' do
+          expect do
+            patch :update, params: { id: question.id, question: update_attributes }, xhr: true
+            question.reload
+          end.not_to change(question, :title)
+        end
+
+        it 'does not update question body in database' do
+          expect do
+            patch :update, params: { id: question.id, question: update_attributes }, xhr: true
+            question.reload
+          end.not_to change(question, :body)
+        end
+      end
+
+      context 'other user\' question with valid attributes' do
+        let!(:question) { create(:question) }
+
+        it 'return 403 Forbidden' do
+          patch :update, params: { id: question.id, question: attributes_for(:question) }, xhr: true
+          expect(response).to have_http_status(403)
+        end
+
+        it 'does not update question title in database' do
+          expect do
+            patch :update, params: { id: question.id, question: attributes_for(:question) }, xhr: true
+            question.reload
+          end.not_to change(question, :title)
+        end
+
+        it 'does not update question body in database' do
+          expect do
+            patch :update, params: { id: question.id, question: attributes_for(:question) }, xhr: true
+            question.reload
+          end.not_to change(question, :body)
         end
       end
     end
