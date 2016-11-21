@@ -30,14 +30,14 @@ RSpec.describe AnswersController, type: :controller do
     describe 'DELETE #destroy' do
       let!(:answer) { create(:answer) }
 
-      it 'redirects to login page' do
-        delete :destroy, params: { id: answer.id, question_id: answer.question.id }
-        expect(response).to redirect_to(new_user_session_url)
+      it 'returns 401 Unauthorized' do
+        delete :destroy, params: { id: answer.id, question_id: answer.question.id }, xhr: true
+        expect(response).to have_http_status(401)
       end
 
-      it 'does not create new answer in database' do
+      it 'does not delete answer in database' do
         expect do
-          delete :destroy, params: { id: answer.id, question_id: answer.question.id }
+          delete :destroy, params: { id: answer.id, question_id: answer.question.id }, xhr: true
         end.not_to change(Answer, :count)
       end
     end
@@ -52,7 +52,7 @@ RSpec.describe AnswersController, type: :controller do
         }
       end
 
-      it 'return 401 Unauthorized' do
+      it 'returns 401 Unauthorized' do
         patch :update, params: request_params, xhr: true
         expect(response).to have_http_status(401)
       end
@@ -122,15 +122,14 @@ RSpec.describe AnswersController, type: :controller do
       context 'own answer' do
         let!(:answer) { create(:answer, user: @user) }
 
-        it 'redirects to question page' do
-          delete :destroy, params: { id: answer.id, question_id: answer.question.id }
-          expect(response).to redirect_to(question_url(answer.question))
-          expect(flash[:notice]).to eq('Answer is deleted.')
+        it 'renders destroy view' do
+          delete :destroy, params: { id: answer.id, question_id: answer.question.id }, xhr: true
+          expect(response).to render_template(:destroy)
         end
 
         it 'deletes answer in database' do
           expect do
-            delete :destroy, params: { id: answer.id, question_id: answer.question.id }
+            delete :destroy, params: { id: answer.id, question_id: answer.question.id }, xhr: true
           end.to change(Answer, :count).by(-1)
         end
       end
@@ -138,15 +137,14 @@ RSpec.describe AnswersController, type: :controller do
       context 'other user\'s answer' do
         let!(:answer) { create(:answer) }
 
-        it 'redirects to question page' do
-          delete :destroy, params: { id: answer.id, question_id: answer.question.id }
-          expect(response).to redirect_to(question_url(answer.question))
-          expect(flash[:alert]).to eq('Not allowed.')
+        it 'returns 403 Forbidden' do
+          delete :destroy, params: { id: answer.id, question_id: answer.question.id }, xhr: true
+          expect(response).to have_http_status(403)
         end
 
         it 'does not delete answer in database' do
           expect do
-            delete :destroy, params: { id: answer.id, question_id: answer.question.id }
+            delete :destroy, params: { id: answer.id, question_id: answer.question.id }, xhr: true
           end.not_to change(Answer, :count)
         end
       end
@@ -219,7 +217,7 @@ RSpec.describe AnswersController, type: :controller do
           }
         end
 
-        it 'return 403 Forbidden' do
+        it 'returns 403 Forbidden' do
           patch :update, params: request_params, xhr: true
           expect(response).to have_http_status(403)
         end

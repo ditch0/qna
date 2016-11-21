@@ -16,11 +16,6 @@ class AnswersController < ApplicationController
 
   def destroy
     @answer.destroy
-    if @answer.destroyed?
-      redirect_to @answer.question, notice: 'Answer is deleted.'
-    else
-      redirect_to @answer.question, alert: 'Cannot delete answer.'
-    end
   end
 
   def update
