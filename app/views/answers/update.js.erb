@@ -1,0 +1,8 @@
+var $answerForm = $('#answer-<%= @answer.id %>');
+<% if @answer.errors.present? %>
+  <% @answer.errors.full_messages.each do |message| %>
+    $('<p>').html('<%= j message %>').appendTo($answerForm.find('.errors'));
+  <% end %>
+<% else %>
+  $answerForm.html('<%= j render 'answer', answer: @answer %>');
+<% end %>

@@ -1,7 +1,7 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_answer, only: [:destroy]
-  before_action :ensure_current_user_is_answer_owner, only: [:destroy]
+  before_action :set_answer, only: [:destroy, :update]
+  before_action :ensure_current_user_is_answer_owner, only: [:destroy, :update]
 
   def new
     @answer = Answer.new
@@ -23,6 +23,10 @@ class AnswersController < ApplicationController
     end
   end
 
+  def update
+    @answer.update(answer_params)
+  end
+
   private
 
   def answer_params
@@ -35,6 +39,9 @@ class AnswersController < ApplicationController
 
   def ensure_current_user_is_answer_owner
     return if @answer.user_id == current_user.id
-    redirect_to @answer.question, alert: 'Not allowed.'
+    respond_to do |format|
+      format.html { redirect_to @answer.question, alert: 'Not allowed.' }
+      format.js { head :forbidden }
+    end
   end
 end

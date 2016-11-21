@@ -2,14 +2,9 @@
   = render 'question_block', question: @question
 
 h3 Answers
-.answers
+.answers-block
   - @question.answers.each do |answer|
     = render 'answers/answer', answer: answer
 
 - if user_signed_in?
-  = form_for [@question, @answer], remote: true do |f|
-    p
-      = f.label :body, 'Your answer'
-      = f.text_area :body
-    p
-      = f.submit 'Submit'
+  = render 'answers/form', answer: @answer

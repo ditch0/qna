@@ -5,4 +5,9 @@ $(document).on 'turbolinks:load', ->
   $('.question-block').on 'click', '.edit-question-button', ->
     $('.question-form').show()
     return
+
+  $('.answers-block').on 'click', '.edit-answer-button', ->
+    $(this).closest('.answer').find('.edit-answer-form').show()
+    return
+
   return

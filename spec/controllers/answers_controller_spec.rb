@@ -41,6 +41,29 @@ RSpec.describe AnswersController, type: :controller do
         end.not_to change(Answer, :count)
       end
     end
+
+    describe 'PATCH #update' do
+      let!(:answer) { create(:answer, question: question) }
+      let!(:request_params) do
+        {
+            id: answer.id,
+            question_id: question.id,
+            answer: attributes_for(:answer)
+        }
+      end
+
+      it 'return 401 Unauthorized' do
+        patch :update, params: request_params, xhr: true
+        expect(response).to have_http_status(401)
+      end
+
+      it 'does not update answer in database' do
+        expect do
+          patch :update, params: request_params, xhr: true
+          answer.reload
+        end.not_to change(answer, :body)
+      end
+    end
   end
 
   context 'authenticated user' do
@@ -125,6 +148,87 @@ RSpec.describe AnswersController, type: :controller do
           expect do
             delete :destroy, params: { id: answer.id, question_id: answer.question.id }
           end.not_to change(Answer, :count)
+        end
+      end
+    end
+
+    describe 'PATCH #update' do
+      context 'own answer with valid attributes' do
+        let!(:answer) { create(:answer, user: @user) }
+        let!(:request_params) do
+          {
+              id: answer.id,
+              question_id: answer.question_id,
+              answer: { body: 'Updated answer text' }
+          }
+        end
+
+        before do
+          patch :update, params: request_params, xhr: true
+        end
+
+        it 'renders update view' do
+          expect(response).to render_template(:update)
+        end
+
+        it 'assigns updated answer' do
+          expect(assigns(:answer)).to have_attributes(body: 'Updated answer text')
+        end
+
+        it 'updates answer in database' do
+          answer.reload
+          expect(answer).to have_attributes(body: 'Updated answer text')
+        end
+      end
+
+      context 'own answer with invalid attributes' do
+        let!(:answer) { create(:answer, user: @user) }
+        let!(:request_params) do
+          {
+              id: answer.id,
+              question_id: answer.question_id,
+              answer: { body: '' }
+          }
+        end
+
+        it 'renders update view' do
+          patch :update, params: request_params, xhr: true
+          expect(response).to render_template(:update)
+        end
+
+        it 'assigns answer with errors' do
+          patch :update, params: request_params, xhr: true
+          expect(assigns(:answer).errors.present?).to be_truthy
+        end
+
+        it 'does not update answer in database', skip_before: true do
+          expect do
+            patch :update, params: request_params, xhr: true
+            answer.reload
+          end.not_to change(answer, :body)
+        end
+      end
+
+      context 'other user\'s answer with valid attributes' do
+        let!(:answer) { create(:answer) }
+        let!(:request_params) do
+          {
+              id: answer.id,
+              question_id: answer.question_id,
+              answer: attributes_for(:answer)
+          }
+        end
+
+        it 'return 403 Forbidden' do
+          patch :update, params: request_params, xhr: true
+          expect(response).to have_http_status(403)
+        end
+
+        it 'does not update answer in database' do
+          expect do
+            patch :update, params: request_params, xhr: true
+            answer.reload
+          end.not_to change(answer, :body)
         end
       end
     end

@@ -192,7 +192,6 @@ RSpec.describe QuestionsController, type: :controller do
         end
 
         it 'assigns updated question' do
-          question.reload
           expect(assigns(:question)).to have_attributes(update_attributes.slice(:title, :body))
         end
 

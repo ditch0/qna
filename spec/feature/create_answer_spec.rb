@@ -11,7 +11,7 @@ feature 'User can answer a question' do
     click_on 'Submit'
 
     expect(page).to have_current_path(question_path(question))
-    within '.answers' do
+    within '.answers-block' do
       expect(page).to have_content('My answer')
     end
     expect(find_field('Your answer')).to have_attributes(value: '')
