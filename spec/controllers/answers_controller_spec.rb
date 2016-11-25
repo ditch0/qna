@@ -46,9 +46,9 @@ RSpec.describe AnswersController, type: :controller do
       let!(:answer) { create(:answer, question: question) }
       let!(:request_params) do
         {
-            id: answer.id,
-            question_id: question.id,
-            answer: attributes_for(:answer)
+          id: answer.id,
+          question_id: question.id,
+          answer: attributes_for(:answer)
         }
       end
 
@@ -155,9 +155,9 @@ RSpec.describe AnswersController, type: :controller do
         let!(:answer) { create(:answer, user: @user) }
         let!(:request_params) do
           {
-              id: answer.id,
-              question_id: answer.question_id,
-              answer: { body: 'Updated answer text' }
+            id: answer.id,
+            question_id: answer.question_id,
+            answer: { body: 'Updated answer text' }
           }
         end
 
@@ -183,9 +183,9 @@ RSpec.describe AnswersController, type: :controller do
         let!(:answer) { create(:answer, user: @user) }
         let!(:request_params) do
           {
-              id: answer.id,
-              question_id: answer.question_id,
-              answer: { body: '' }
+            id: answer.id,
+            question_id: answer.question_id,
+            answer: { body: '' }
           }
         end
 
@@ -211,9 +211,9 @@ RSpec.describe AnswersController, type: :controller do
         let!(:answer) { create(:answer) }
         let!(:request_params) do
           {
-              id: answer.id,
-              question_id: answer.question_id,
-              answer: attributes_for(:answer)
+            id: answer.id,
+            question_id: answer.question_id,
+            answer: attributes_for(:answer)
           }
         end
 

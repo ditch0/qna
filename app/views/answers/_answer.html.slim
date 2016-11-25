@@ -1,6 +1,9 @@
 div.answer id="answer-#{answer.id}"
   p= answer.body
-  - if user_signed_in? && answer.user_id == current_user.id
-    = button_to 'Delete answer', question_answer_path(answer.question, answer), remote: true, method: :delete
-    = button_tag 'Edit answer', type: :button, class: 'edit-answer-button'
-    = render 'answers/form', answer: answer
+  - if user_signed_in?
+    - if answer.question.user_id == current_user.id
+      = best_answer_button(answer)
+    - if answer.user_id == current_user.id
+      = button_to 'Delete answer', question_answer_path(answer.question, answer), remote: true, method: :delete
+      = button_tag 'Edit answer', type: :button, class: 'edit-answer-button'
+      = render 'answers/form', answer: answer

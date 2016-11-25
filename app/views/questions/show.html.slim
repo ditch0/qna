@@ -3,8 +3,7 @@
 
 h3 Answers
 .answers-block
-  - @question.answers.each do |answer|
-    = render 'answers/answer', answer: answer
+  = render 'answers/answers', answers: @answers
 
 - if user_signed_in?
   = render 'answers/form', answer: @answer
