@@ -24,8 +24,7 @@ class AnswersController < ApplicationController
   end
 
   def set_is_best
-    @answer.is_best = params[:is_best]
-    @answer.save
+    @answer.update_is_best(params[:is_best])
     @answers = @answer.question.answers.best_and_newest_order
   end
 

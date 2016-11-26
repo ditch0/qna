@@ -8,7 +8,7 @@ describe Answer, type: :model do
 
   it 'should set best answer' do
     answer = create(:answer)
-    answer.is_best = true
+    answer.update_is_best(true)
     answer.save
     answer.reload
     expect(answer.is_best).to be_truthy
@@ -19,8 +19,8 @@ describe Answer, type: :model do
     first_best_answer = question.answers.first
     next_best_answer = question.answers.last
 
-    first_best_answer.update_attributes(is_best: true)
-    next_best_answer.update_attributes(is_best: true)
+    first_best_answer.update_is_best(true)
+    next_best_answer.update_is_best(true)
 
     first_best_answer.reload
     next_best_answer.reload
