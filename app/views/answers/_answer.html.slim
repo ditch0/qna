@@ -1,4 +1,4 @@
-div.answer id="answer-#{answer.id}"
+div id="answer-#{answer.id}" class=(answer.is_best ? 'answer best-answer' : 'answer')
   p= answer.body
   - if user_signed_in?
     - if answer.question.user_id == current_user.id
