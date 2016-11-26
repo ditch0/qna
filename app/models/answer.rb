@@ -5,6 +5,8 @@ class Answer < ApplicationRecord
 
   before_save :unset_previous_best_answer, if: :is_best
 
+  scope :best_and_newest_order, ->{ order(is_best: :desc, id: :desc) }
+
   private
 
   def unset_previous_best_answer
