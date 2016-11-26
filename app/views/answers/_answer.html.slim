@@ -1,7 +1,7 @@
 div id="answer-#{answer.id}" class=(answer.is_best ? 'answer best-answer' : 'answer')
   p= answer.body
   - if user_signed_in?
-    - if answer.question.user_id == current_user.id
+    - if answer.question.user_id == current_user.id && !answer.is_best
       = best_answer_button(answer)
     - if answer.user_id == current_user.id
       = button_to 'Delete answer', question_answer_path(answer.question, answer), remote: true, method: :delete
