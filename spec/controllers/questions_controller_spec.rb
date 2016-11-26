@@ -93,22 +93,6 @@ RSpec.describe QuestionsController, type: :controller do
         end.not_to change(question, :body)
       end
     end
-
-    describe 'POST #set_best_answer' do
-      let!(:question) { create(:question_with_answers) }
-      before do
-        post :set_best_answer, params: { id: question.id, answer_id: question.answers.first.id }, xhr: true
-      end
-
-      it 'return 401 Unauthorized' do
-        expect(response).to have_http_status(401)
-      end
-
-      it 'does not set best answer to question' do
-        question.reload
-        expect(question.best_answer_id).to be_nil
-      end
-    end
   end
 
   context 'authenticated user' do
@@ -266,46 +250,6 @@ RSpec.describe QuestionsController, type: :controller do
             patch :update, params: { id: question.id, question: attributes_for(:question) }, xhr: true
             question.reload
           end.not_to change(question, :body)
-        end
-      end
-    end
-
-    describe 'POST #set_best_answer' do
-      context 'own question' do
-        let!(:question) { create(:question_with_answers, user: @user) }
-        let!(:best_answer) { question.answers.first }
-        before do
-          post :set_best_answer, params: { id: question.id, answer_id: best_answer.id }, xhr: true
-          question.reload
-        end
-
-        it 'renders set_best_answer view' do
-          expect(response).to render_template(:set_best_answer)
-        end
-
-        it 'assigns @answers' do
-          expect(assigns(:answers)).not_to be_nil
-        end
-
-        it 'sets best answer to question' do
-          expect(question.best_answer).to eq(best_answer)
-        end
-      end
-
-      context 'other user\'s question' do
-        let!(:question) { create(:question_with_answers) }
-        let!(:best_answer) { question.answers.first }
-        before do
-          post :set_best_answer, params: { id: question.id, answer_id: best_answer.id }, xhr: true
-        end
-
-        it 'return 403 Forbidden' do
-          expect(response).to have_http_status(403)
-        end
-
-        it 'does not set best answer to question' do
-          question.reload
-          expect(question.best_answer_id).to be_nil
         end
       end
     end

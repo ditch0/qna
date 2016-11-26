@@ -64,6 +64,22 @@ RSpec.describe AnswersController, type: :controller do
         end.not_to change(answer, :body)
       end
     end
+
+    describe 'POST #set_is_best' do
+      let!(:answer) { create(:answer, question: question) }
+      before do
+        post :set_is_best, params: { question_id: question.id, id: answer.id, is_best: true }, xhr: true
+      end
+
+      it 'returns 401 Unauthorized' do
+        expect(response).to have_http_status(401)
+      end
+
+      it 'does not update answer in database' do
+        answer.reload
+        expect(answer.is_best).to be_falsey
+      end
+    end
   end
 
   context 'authenticated user' do
@@ -227,6 +243,47 @@ RSpec.describe AnswersController, type: :controller do
             patch :update, params: request_params, xhr: true
             answer.reload
           end.not_to change(answer, :body)
+        end
+      end
+    end
+
+    describe 'POST #set_is_best' do
+      context 'own question' do
+        let!(:own_question) { create(:question, user: @user) }
+        let!(:answer) { create(:answer, question: own_question) }
+
+        before do
+          post :set_is_best, params: { question_id: own_question.id, id: answer.id, is_best: true }, xhr: true
+        end
+
+        it 'renders set_is_best view' do
+          expect(response).to render_template(:set_is_best)
+        end
+
+        it 'assigns @answers' do
+          expect(assigns(:answers)).not_to be_nil
+        end
+
+        it 'updates answer in database' do
+          answer.reload
+          expect(answer.is_best).to be_truthy
+        end
+      end
+
+      context 'other user\'s question' do
+        let!(:answer) { create(:answer, question: question) }
+
+        before do
+          post :set_is_best, params: { question_id: question.id, id: answer.id, is_best: true }, xhr: true
+        end
+
+        it 'returns 403 Forbidden' do
+          expect(response).to have_http_status(403)
+        end
+
+        it 'does not update answer in database' do
+          answer.reload
+          expect(answer.is_best).to be_falsey
         end
       end
     end

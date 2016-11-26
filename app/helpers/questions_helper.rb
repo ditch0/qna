@@ -3,12 +3,14 @@ module QuestionsHelper
     button_to(
       'Best answer',
       {
-        controller: 'questions',
-        action: 'set_best_answer'
+        controller: 'answers',
+        action: 'set_is_best',
+        id: answer.id,
+        question_id: answer.question_id
       },
       method: :post,
       remote: true,
-      params: { answer_id: answer.id },
+      params: { is_best: true },
       class: 'best-answer-button'
     )
   end

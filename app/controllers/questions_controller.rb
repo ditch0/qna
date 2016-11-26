@@ -10,7 +10,7 @@ class QuestionsController < ApplicationController
   def show
     @answer = Answer.new
     @answer.question = @question
-    @answers = sorted_answers
+    @answers = @question.answers.best_and_newest_order
   end
 
   def new
@@ -40,22 +40,7 @@ class QuestionsController < ApplicationController
     @question.update(question_params)
   end
 
-  def set_best_answer
-    @question.best_answer = Answer.find(params[:answer_id])
-    @question.save
-    @answers = sorted_answers
-  end
-
   private
-
-  def sorted_answers
-    @question.answers.sort_by do |answer|
-      [
-        answer == @question.best_answer ? 0 : 1,
-        -1 * answer.id
-      ]
-    end
-  end
 
   def question_params
     params.require(:question).permit(:title, :body)
