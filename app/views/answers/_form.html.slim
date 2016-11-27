@@ -1,0 +1,7 @@
+= form_for [answer.question, answer], remote: true, html: { class: (answer.new_record? ? 'new-answer-form' : 'edit-answer-form') } do |f|
+  div.errors
+  p
+    = f.label :body, 'Your answer'
+    = f.text_area :body
+  p
+    = f.submit answer.new_record? ? 'Submit' : 'Save'

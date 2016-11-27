@@ -1,4 +1,4 @@
 <% if @answer.persisted? %>
-  $('.answers').append('<%= j render @answer %>');
-  $('#answer_body').val('');
+  $('.answers-block').append('<%= j render @answer %>');
+  $('.new-answer-form textarea').val('');
 <% end %>

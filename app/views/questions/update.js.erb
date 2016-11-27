@@ -1,0 +1,8 @@
+<% if @question.errors.present? %>
+  $('.question-form .errors').empty();
+  <% @question.errors.full_messages.each do |message| %>
+    $('<p>').html('<%= j message %>').appendTo('.question-form .errors');
+  <% end %>
+<% else %>
+  $('.question-block').html('<%= j render 'question_block', question: @question %>')
+<% end %>

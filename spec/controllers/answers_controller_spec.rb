@@ -30,15 +30,54 @@ RSpec.describe AnswersController, type: :controller do
     describe 'DELETE #destroy' do
       let!(:answer) { create(:answer) }
 
-      it 'redirects to login page' do
-        delete :destroy, params: { id: answer.id, question_id: answer.question.id }
-        expect(response).to redirect_to(new_user_session_url)
+      it 'returns 401 Unauthorized' do
+        delete :destroy, params: { id: answer.id, question_id: answer.question.id }, xhr: true
+        expect(response).to have_http_status(401)
       end
 
-      it 'does not create new answer in database' do
+      it 'does not delete answer in database' do
         expect do
-          delete :destroy, params: { id: answer.id, question_id: answer.question.id }
+          delete :destroy, params: { id: answer.id, question_id: answer.question.id }, xhr: true
         end.not_to change(Answer, :count)
+      end
+    end
+
+    describe 'PATCH #update' do
+      let!(:answer) { create(:answer, question: question) }
+      let!(:request_params) do
+        {
+          id: answer.id,
+          question_id: question.id,
+          answer: attributes_for(:answer)
+        }
+      end
+
+      it 'returns 401 Unauthorized' do
+        patch :update, params: request_params, xhr: true
+        expect(response).to have_http_status(401)
+      end
+
+      it 'does not update answer in database' do
+        expect do
+          patch :update, params: request_params, xhr: true
+          answer.reload
+        end.not_to change(answer, :body)
+      end
+    end
+
+    describe 'POST #set_is_best' do
+      let!(:answer) { create(:answer, question: question) }
+      before do
+        post :set_is_best, params: { question_id: question.id, id: answer.id, is_best: true }, xhr: true
+      end
+
+      it 'returns 401 Unauthorized' do
+        expect(response).to have_http_status(401)
+      end
+
+      it 'does not update answer in database' do
+        answer.reload
+        expect(answer.is_best).to be_falsey
       end
     end
   end
@@ -99,15 +138,14 @@ RSpec.describe AnswersController, type: :controller do
       context 'own answer' do
         let!(:answer) { create(:answer, user: @user) }
 
-        it 'redirects to question page' do
-          delete :destroy, params: { id: answer.id, question_id: answer.question.id }
-          expect(response).to redirect_to(question_url(answer.question))
-          expect(flash[:notice]).to eq('Answer is deleted.')
+        it 'renders destroy view' do
+          delete :destroy, params: { id: answer.id, question_id: answer.question.id }, xhr: true
+          expect(response).to render_template(:destroy)
         end
 
         it 'deletes answer in database' do
           expect do
-            delete :destroy, params: { id: answer.id, question_id: answer.question.id }
+            delete :destroy, params: { id: answer.id, question_id: answer.question.id }, xhr: true
           end.to change(Answer, :count).by(-1)
         end
       end
@@ -115,16 +153,137 @@ RSpec.describe AnswersController, type: :controller do
       context 'other user\'s answer' do
         let!(:answer) { create(:answer) }
 
-        it 'redirects to question page' do
-          delete :destroy, params: { id: answer.id, question_id: answer.question.id }
-          expect(response).to redirect_to(question_url(answer.question))
-          expect(flash[:alert]).to eq('Not allowed.')
+        it 'returns 403 Forbidden' do
+          delete :destroy, params: { id: answer.id, question_id: answer.question.id }, xhr: true
+          expect(response).to have_http_status(403)
         end
 
         it 'does not delete answer in database' do
           expect do
-            delete :destroy, params: { id: answer.id, question_id: answer.question.id }
+            delete :destroy, params: { id: answer.id, question_id: answer.question.id }, xhr: true
           end.not_to change(Answer, :count)
+        end
+      end
+    end
+
+    describe 'PATCH #update' do
+      context 'own answer with valid attributes' do
+        let!(:answer) { create(:answer, user: @user) }
+        let!(:request_params) do
+          {
+            id: answer.id,
+            question_id: answer.question_id,
+            answer: { body: 'Updated answer text' }
+          }
+        end
+
+        before do
+          patch :update, params: request_params, xhr: true
+        end
+
+        it 'renders update view' do
+          expect(response).to render_template(:update)
+        end
+
+        it 'assigns updated answer' do
+          expect(assigns(:answer)).to have_attributes(body: 'Updated answer text')
+        end
+
+        it 'updates answer in database' do
+          answer.reload
+          expect(answer).to have_attributes(body: 'Updated answer text')
+        end
+      end
+
+      context 'own answer with invalid attributes' do
+        let!(:answer) { create(:answer, user: @user) }
+        let!(:request_params) do
+          {
+            id: answer.id,
+            question_id: answer.question_id,
+            answer: { body: '' }
+          }
+        end
+
+        it 'renders update view' do
+          patch :update, params: request_params, xhr: true
+          expect(response).to render_template(:update)
+        end
+
+        it 'assigns answer with errors' do
+          patch :update, params: request_params, xhr: true
+          expect(assigns(:answer).errors.present?).to be_truthy
+        end
+
+        it 'does not update answer in database', skip_before: true do
+          expect do
+            patch :update, params: request_params, xhr: true
+            answer.reload
+          end.not_to change(answer, :body)
+        end
+      end
+
+      context 'other user\'s answer with valid attributes' do
+        let!(:answer) { create(:answer) }
+        let!(:request_params) do
+          {
+            id: answer.id,
+            question_id: answer.question_id,
+            answer: attributes_for(:answer)
+          }
+        end
+
+        it 'returns 403 Forbidden' do
+          patch :update, params: request_params, xhr: true
+          expect(response).to have_http_status(403)
+        end
+
+        it 'does not update answer in database' do
+          expect do
+            patch :update, params: request_params, xhr: true
+            answer.reload
+          end.not_to change(answer, :body)
+        end
+      end
+    end
+
+    describe 'POST #set_is_best' do
+      context 'own question' do
+        let!(:own_question) { create(:question, user: @user) }
+        let!(:answer) { create(:answer, question: own_question) }
+
+        before do
+          post :set_is_best, params: { question_id: own_question.id, id: answer.id, is_best: true }, xhr: true
+        end
+
+        it 'renders set_is_best view' do
+          expect(response).to render_template(:set_is_best)
+        end
+
+        it 'assigns @answers' do
+          expect(assigns(:answers)).not_to be_nil
+        end
+
+        it 'updates answer in database' do
+          answer.reload
+          expect(answer.is_best).to be_truthy
+        end
+      end
+
+      context 'other user\'s question' do
+        let!(:answer) { create(:answer, question: question) }
+
+        before do
+          post :set_is_best, params: { question_id: question.id, id: answer.id, is_best: true }, xhr: true
+        end
+
+        it 'returns 403 Forbidden' do
+          expect(response).to have_http_status(403)
+        end
+
+        it 'does not update answer in database' do
+          answer.reload
+          expect(answer.is_best).to be_falsey
         end
       end
     end

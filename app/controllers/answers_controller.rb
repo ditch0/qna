@@ -1,7 +1,8 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_answer, only: [:destroy]
-  before_action :ensure_current_user_is_answer_owner, only: [:destroy]
+  before_action :set_answer, only: [:destroy, :update, :set_is_best]
+  before_action :ensure_current_user_is_answer_owner, only: [:destroy, :update]
+  before_action :ensure_current_user_is_question_owner, only: [:set_is_best]
 
   def new
     @answer = Answer.new
@@ -16,11 +17,15 @@ class AnswersController < ApplicationController
 
   def destroy
     @answer.destroy
-    if @answer.destroyed?
-      redirect_to @answer.question, notice: 'Answer is deleted.'
-    else
-      redirect_to @answer.question, alert: 'Cannot delete answer.'
-    end
+  end
+
+  def update
+    @answer.update(answer_params)
+  end
+
+  def set_is_best
+    @answer.update_is_best(params[:is_best])
+    @answers = @answer.question.answers.best_and_newest_order
   end
 
   private
@@ -35,6 +40,18 @@ class AnswersController < ApplicationController
 
   def ensure_current_user_is_answer_owner
     return if @answer.user_id == current_user.id
-    redirect_to @answer.question, alert: 'Not allowed.'
+    respond_with_forbidden
+  end
+
+  def ensure_current_user_is_question_owner
+    return if @answer.question.user_id == current_user.id
+    respond_with_forbidden
+  end
+
+  def respond_with_forbidden
+    respond_to do |format|
+      format.html { redirect_to @answer.question, alert: 'Not allowed.' }
+      format.js { head :forbidden }
+    end
   end
 end

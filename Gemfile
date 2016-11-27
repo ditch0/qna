@@ -56,6 +56,7 @@ group :test do
   gem 'shoulda-matchers'
   gem 'capybara'
   gem 'launchy'
+  gem 'orderly'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
