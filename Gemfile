@@ -41,6 +41,7 @@ group :development, :test do
   gem 'rails-controller-testing'
   gem 'poltergeist'
   gem 'database_cleaner'
+  gem 'spring-commands-rspec'
 end
 
 group :development do
