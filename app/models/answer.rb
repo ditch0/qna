@@ -8,8 +8,7 @@ class Answer < ApplicationRecord
   def update_is_best(is_best)
     ActiveRecord::Base.transaction do
       question.answers.update_all(is_best: false)
-      self.is_best = is_best
-      save
+      update(is_best: is_best)
     end
   end
 end
