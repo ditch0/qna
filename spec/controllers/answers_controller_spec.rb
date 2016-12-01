@@ -107,6 +107,19 @@ RSpec.describe AnswersController, type: :controller do
           end.to change(question.answers, :count).by(1)
         end
 
+        it 'creates nested attachment' do
+          post :create, xhr: true, params: {
+            answer: {
+              body:  'Answer text',
+              attachments_attributes: {
+                '0': { file: fixture_file_upload('uploads/a_file.txt', 'text/plain') }
+              }
+            },
+            question_id: question
+          }
+          expect(Answer.last.attachments.count).to eq(1)
+        end
+
         it 'creates answer owned by current user' do
           post :create, params: answer_params, xhr: true
           expect(Answer.last.user_id).to eq(@user.id)
