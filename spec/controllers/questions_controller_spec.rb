@@ -109,6 +109,10 @@ RSpec.describe QuestionsController, type: :controller do
       it 'assigns new question model @question' do
         expect(assigns(:question)).to be_a_new(Question)
       end
+
+      it 'has new nested attachment model for @question' do
+        expect(assigns(:question).attachments.first).to be_a_new(Attachment)
+      end
     end
 
     describe 'POST #create' do
@@ -119,7 +123,20 @@ RSpec.describe QuestionsController, type: :controller do
           end.to change(Question, :count).by(1)
         end
 
-        it 'creates answer owned by current user' do
+        it 'creates nested attachment' do
+          post :create, params: {
+            question: {
+              title: 'Question title',
+              body:  'Question text',
+              attachments_attributes: {
+                '0': { file: fixture_file_upload('uploads/a_file.txt', 'text/plain') }
+              }
+            }
+          }
+          expect(Question.last.attachments.count).to eq(1)
+        end
+
+        it 'creates question owned by current user' do
           post :create, params: { question: attributes_for(:question) }
           expect(Question.last.user_id).to eq(@user.id)
         end
