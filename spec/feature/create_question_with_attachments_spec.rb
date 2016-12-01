@@ -13,6 +13,6 @@ feature 'Creating question with attachment' do
     click_on 'Create'
 
     visit question_path(user.questions.first)
-    expect(page).to have_link 'Gemfile', href: '/uploads/Gemfile'
+    expect(page).to have_link 'Gemfile', href: "/uploads/attachment/file/#{Attachment.last.id}/Gemfile"
   end
 end

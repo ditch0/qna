@@ -12,6 +12,6 @@ feature 'Creating answer with attachment' do
     attach_file 'File', "#{Rails.root}/Gemfile"
     click_on 'Submit'
 
-    expect(page).to have_link 'Gemfile', href: '/uploads/Gemfile'
+    expect(page).to have_link 'Gemfile', href: "/uploads/attachment/file/#{Attachment.last.id}/Gemfile"
   end
 end
