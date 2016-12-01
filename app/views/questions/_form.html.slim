@@ -6,5 +6,9 @@
   p
     = f.label :body, 'Text'
     = f.text_area :body
+  - unless question.persisted?
+    p = f.fields_for :attachments do |a|
+      = a.label :file
+      = a.file_field :file
   p
     = f.submit(question.new_record? ? 'Create' : 'Save')
