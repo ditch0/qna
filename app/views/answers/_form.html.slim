@@ -4,8 +4,7 @@
     = f.label :body, 'Your answer'
     = f.text_area :body
   - if answer.new_record?
-    p = f.fields_for :attachments do |a|
-      = a.label :file
-      = a.file_field :file
+    p Attachments
+    p= link_to_add_association 'Add attachment', f, :attachments, partial: 'shared/attachment_fields'
   p
     = f.submit answer.new_record? ? 'Submit' : 'Save'

@@ -10,13 +10,11 @@ class QuestionsController < ApplicationController
   def show
     @answer = Answer.new
     @answer.question = @question
-    @answer.attachments.build
     @answers = @question.answers.best_and_newest_order
   end
 
   def new
     @question = Question.new
-    @question.attachments.build
   end
 
   def create
