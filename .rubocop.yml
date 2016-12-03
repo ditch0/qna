@@ -8,8 +8,10 @@ AllCops:
     - 'vendor/**/*'
     - 'db/**/*.rb'
     - 'bin/**/*'
-  RunRailsCops: true
   DisplayCopNames: true
+
+Rails:
+  Enabled: true
 
 Metrics/LineLength:
   Max: 120
@@ -29,3 +31,6 @@ Style/BlockComments:
 Style/StringLiterals:
   Exclude:
     - 'spec/rails_helper.rb'
+
+Style/FrozenStringLiteralComment:
+  Enabled: false

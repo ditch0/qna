@@ -6,5 +6,8 @@
   p
     = f.label :body, 'Text'
     = f.text_area :body
+  - if question.new_record?
+    p Attachments
+    p= link_to_add_association 'Add attachment', f, :attachments, partial: 'shared/attachment_fields'
   p
     = f.submit(question.new_record? ? 'Create' : 'Save')

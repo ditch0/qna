@@ -3,5 +3,8 @@
   p
     = f.label :body, 'Your answer'
     = f.text_area :body
+  - if answer.new_record?
+    p Attachments
+    p= link_to_add_association 'Add attachment', f, :attachments, partial: 'shared/attachment_fields'
   p
     = f.submit answer.new_record? ? 'Submit' : 'Save'
