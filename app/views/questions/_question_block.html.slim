@@ -1,10 +1,14 @@
 h2= question.title
 p= question.body
 - if question.attachments.exists?
-  ul
-    - question.attachments.each do |a|
-      li= link_to a.file.identifier, a.file.url
-- if user_signed_in? && question.user_id == current_user.id
+  ul.attachments
+    - question.attachments.each do |attachment|
+      li
+        = link_to attachment.file.identifier, attachment.file.url
+        - if user_is_question_owner?(question)
+          = delete_question_attachment_link(attachment)
+
+- if user_is_question_owner?(question)
   p
     = button_to 'Delete question', question_path(question), method: :delete
   p

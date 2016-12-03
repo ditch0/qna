@@ -4,7 +4,7 @@ class Answer < ApplicationRecord
   belongs_to :question
   has_many :attachments, as: :attachmentable, dependent: :destroy
 
-  accepts_nested_attributes_for :attachments
+  accepts_nested_attributes_for :attachments, allow_destroy: true
 
   scope :best_and_newest_order, -> { order(is_best: :desc, id: :desc) }
 

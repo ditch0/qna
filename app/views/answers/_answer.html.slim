@@ -1,13 +1,16 @@
 div id="answer-#{answer.id}" class=(answer.is_best ? 'answer best-answer' : 'answer')
   p= answer.body
   - if answer.attachments.exists?
-    ul
-      - answer.attachments.each do |a|
-        li= link_to a.file.identifier, a.file.url
-  - if user_signed_in?
-    - if answer.question.user_id == current_user.id && !answer.is_best
-      = best_answer_button(answer)
-    - if answer.user_id == current_user.id
-      = button_to 'Delete answer', question_answer_path(answer.question, answer), remote: true, method: :delete
-      = button_tag 'Edit answer', type: :button, class: 'edit-answer-button'
-      = render 'answers/form', answer: answer
+    ul.attachments
+      - answer.attachments.each do |attachment|
+        li
+          = link_to attachment.file.identifier, attachment.file.url
+          - if user_is_answer_owner?(answer)
+            = delete_answer_attachment_link(attachment)
+
+  - if user_is_question_owner?(answer.question) && !answer.is_best
+    = best_answer_button(answer)
+  - if user_is_answer_owner?(answer)
+    = button_to 'Delete answer', question_answer_path(answer.question, answer), remote: true, method: :delete
+    = button_tag 'Edit answer', type: :button, class: 'edit-answer-button'
+    = render 'answers/form', answer: answer
