@@ -6,5 +6,5 @@ class Question < ApplicationRecord
   has_many :attachments, as: :attachmentable, dependent: :destroy
   belongs_to :user
 
-  accepts_nested_attributes_for :attachments, allow_destroy: true
+  accepts_nested_attributes_for :attachments, reject_if: :all_blank, allow_destroy: true
 end
