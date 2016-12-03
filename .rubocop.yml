@@ -10,8 +10,8 @@ AllCops:
     - 'bin/**/*'
   DisplayCopNames: true
 
-  Rails:
-    Enabled: true
+Rails:
+  Enabled: true
 
 Metrics/LineLength:
   Max: 120
