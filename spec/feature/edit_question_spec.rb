@@ -6,7 +6,7 @@ feature 'Question editing' do
   given!(:question_not_owned_by_user) { create(:question) }
 
   scenario 'Guest user cannot edit question' do
-    visit questions_path(question)
+    visit question_path(question)
 
     expect(page).not_to have_button('Edit question')
   end
