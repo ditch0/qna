@@ -32,8 +32,7 @@ ActiveRecord::Schema.define(version: 20161129191404) do
     t.string   "attachmentable_type", null: false
     t.datetime "created_at",          null: false
     t.datetime "updated_at",          null: false
-    t.index ["attachmentable_id"], name: "index_attachments_on_attachmentable_id", using: :btree
-    t.index ["attachmentable_type"], name: "index_attachments_on_attachmentable_type", using: :btree
+    t.index ["attachmentable_id", "attachmentable_type"], name: "index_attachments_on_attachmentable_id_and_attachmentable_type", using: :btree
   end
 
   create_table "questions", force: :cascade do |t|
