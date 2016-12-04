@@ -32,6 +32,7 @@ gem 'devise'
 gem 'carrierwave'
 gem 'remotipart'
 gem 'cocoon'
+gem 'sqlite3'
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
