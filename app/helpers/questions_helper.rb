@@ -17,15 +17,14 @@ module QuestionsHelper
 
   def delete_question_attachment_link(attachment)
     path = question_path(
-      attachment.attachmentable_id,
+      attachment.attachmentable,
       question: { attachments_attributes: { id: attachment.id, _destroy: true } }
     )
     link_to('Delete', path, remote: true, method: :patch)
   end
 
   def delete_answer_attachment_link(attachment)
-    path = question_answer_path(
-      attachment.attachmentable.question,
+    path = answer_path(
       attachment.attachmentable,
       answer: { attachments_attributes: { id: attachment.id, _destroy: true } }
     )

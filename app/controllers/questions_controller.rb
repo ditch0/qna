@@ -8,8 +8,7 @@ class QuestionsController < ApplicationController
   end
 
   def show
-    @answer = Answer.new
-    @answer.question = @question
+    @answer = @question.answers.build
     @answers = @question.answers.best_and_newest_order
   end
 

@@ -1,4 +1,4 @@
-= form_for [answer.question, answer], remote: true, html: { class: (answer.new_record? ? 'new-answer-form' : 'edit-answer-form') } do |f|
+= form_for shallow_args(answer.question, answer), remote: true, html: { class: (answer.new_record? ? 'new-answer-form' : 'edit-answer-form') } do |f|
   div.errors
   p
     = f.label :body, 'Your answer'

@@ -11,6 +11,6 @@ div id="answer-#{answer.id}" class=(answer.is_best ? 'answer best-answer' : 'ans
   - if user_is_question_owner?(answer.question) && !answer.is_best
     = best_answer_button(answer)
   - if user_is_answer_owner?(answer)
-    = button_to 'Delete answer', question_answer_path(answer.question, answer), remote: true, method: :delete
+    = button_to 'Delete answer', answer_path(answer), remote: true, method: :delete
     = button_tag 'Edit answer', type: :button, class: 'edit-answer-button'
     = render 'answers/form', answer: answer
