@@ -6,7 +6,7 @@ div id="answer-#{answer.id}" class=(answer.is_best ? 'answer best-answer' : 'ans
         li
           = link_to attachment.file.identifier, attachment.file.url
           - if user_is_answer_owner?(answer)
-            = delete_answer_attachment_link(attachment)
+            = delete_attachment_link(attachment)
 
   - if user_is_question_owner?(answer.question) && !answer.is_best
     = best_answer_button(answer)

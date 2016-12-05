@@ -15,18 +15,11 @@ module QuestionsHelper
     )
   end
 
-  def delete_question_attachment_link(attachment)
-    path = question_path(
+  def delete_attachment_link(attachment)
+    request_param_name = attachment.attachmentable.class.name.downcase
+    path = polymorphic_path(
       attachment.attachmentable,
-      question: { attachments_attributes: { id: attachment.id, _destroy: true } }
-    )
-    link_to('Delete', path, remote: true, method: :patch)
-  end
-
-  def delete_answer_attachment_link(attachment)
-    path = answer_path(
-      attachment.attachmentable,
-      answer: { attachments_attributes: { id: attachment.id, _destroy: true } }
+      request_param_name => { attachments_attributes: { id: attachment.id, _destroy: true } }
     )
     link_to('Delete', path, remote: true, method: :patch)
   end

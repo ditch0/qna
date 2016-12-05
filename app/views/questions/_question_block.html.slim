@@ -6,7 +6,7 @@ p= question.body
       li
         = link_to attachment.file.identifier, attachment.file.url
         - if user_is_question_owner?(question)
-          = delete_question_attachment_link(attachment)
+          = delete_attachment_link(attachment)
 
 - if user_is_question_owner?(question)
   p
