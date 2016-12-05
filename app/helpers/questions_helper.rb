@@ -5,8 +5,7 @@ module QuestionsHelper
       {
         controller: 'answers',
         action: 'set_is_best',
-        id: answer.id,
-        question_id: answer.question_id
+        id: answer.id
       },
       method: :post,
       remote: true,
