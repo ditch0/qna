@@ -1,5 +1,6 @@
 class AnswersController < ApplicationController
-  before_action :authenticate_user!
+  include CanVote
+
   before_action :set_answer, only: [:destroy, :update, :set_is_best]
   before_action :ensure_current_user_is_answer_owner, only: [:destroy, :update]
   before_action :ensure_current_user_is_question_owner, only: [:set_is_best]

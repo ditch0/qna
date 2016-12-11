@@ -1,5 +1,6 @@
 class Answer < ApplicationRecord
   include Attachmentable
+  include Votable
 
   validates :body, presence: true
   belongs_to :user
@@ -12,5 +13,9 @@ class Answer < ApplicationRecord
       question.answers.update_all(is_best: false)
       update(is_best: is_best)
     end
+  end
+
+  def user_can_vote?(user)
+    user_id != user.id
   end
 end
