@@ -80,6 +80,33 @@ RSpec.describe AnswersController, type: :controller do
         expect(answer.is_best).to be_falsey
       end
     end
+
+    describe 'POST #vote_up' do
+      let!(:answer) { create(:answer) }
+
+      it 'return 401 Unauthorized' do
+        post :vote_up, params: { id: answer.id }, xhr: true
+        expect(response).to have_http_status(401)
+      end
+    end
+
+    describe 'POST #vote_down' do
+      let!(:answer) { create(:answer) }
+
+      it 'return 401 Unauthorized' do
+        post :vote_down, params: { id: answer.id }, xhr: true
+        expect(response).to have_http_status(401)
+      end
+    end
+
+    describe 'POST #reset_vote' do
+      let!(:answer) { create(:answer) }
+
+      it 'return 401 Unauthorized' do
+        post :reset_vote, params: { id: answer.id }, xhr: true
+        expect(response).to have_http_status(401)
+      end
+    end
   end
 
   context 'authenticated user' do
@@ -297,6 +324,93 @@ RSpec.describe AnswersController, type: :controller do
         it 'does not update answer in database' do
           answer.reload
           expect(answer.is_best).to be_falsey
+        end
+      end
+    end
+
+    shared_examples_for 'a vote method' do |method_name, user_vote_value|
+      context 'answer by other user' do
+        let!(:answer) { create(:answer) }
+
+        it 'renders json' do
+          post method_name, params: { id: answer.id }, xhr: true
+          expect(response.header['Content-Type']).to include('application/json')
+        end
+
+        it 'returns updated voting info' do
+          post method_name, params: { id: answer.id }, xhr: true
+          response_data = JSON.parse(response.body, {symbolize_names: true})
+          expect(response_data[:rating]).to eq(user_vote_value)
+          expect(response_data[:user_vote]).to eq(user_vote_value)
+        end
+
+        it 'updates rating in database' do
+          expect do
+            post method_name, params: { id: answer.id }, xhr: true
+          end.to change(answer, :rating).by(user_vote_value)
+        end
+      end
+
+      context 'answer by same user' do
+        let!(:answer) { create(:answer, user: @user) }
+
+        it 'return 403 Forbidden' do
+          post method_name, params: { id: answer.id }, xhr: true
+          expect(response).to have_http_status(403)
+        end
+
+        it 'does not update answer rating in database' do
+          expect do
+            post method_name, params: { id: answer.id }, xhr: true
+          end.not_to change(answer, :rating)
+        end
+      end
+    end
+
+    describe 'POST #vote_up' do
+      it_behaves_like 'a vote method', 'vote_up', 1
+    end
+
+    describe 'POST #vote_down' do
+      it_behaves_like 'a vote method', 'vote_down', -1
+    end
+
+    describe 'POST #reset_vote' do
+      context 'answer by other user' do
+        let!(:answer) { create(:answer) }
+        before { answer.vote_up(@user) }
+
+        it 'renders json' do
+          post :reset_vote, params: { id: answer.id }, xhr: true
+          expect(response.header['Content-Type']).to include('application/json')
+        end
+
+        it 'returns updated voting info' do
+          post :reset_vote, params: { id: answer.id }, xhr: true
+          response_data = JSON.parse(response.body, {symbolize_names: true})
+          expect(response_data[:rating]).to eq(0)
+          expect(response_data[:user_vote]).to be_nil
+        end
+
+        it 'updates rating in database' do
+          expect do
+            post :reset_vote, params: { id: answer.id }, xhr: true
+          end.to change(answer, :rating).by(-1)
+        end
+      end
+
+      context 'answer by same user' do
+        let!(:answer) { create(:answer, user: @user) }
+
+        it 'return 403 Forbidden' do
+          post :reset_vote, params: { id: answer.id }, xhr: true
+          expect(response).to have_http_status(403)
+        end
+
+        it 'does not update answer rating in database' do
+          expect do
+            post :reset_vote, params: { id: answer.id }, xhr: true
+          end.not_to change(answer, :rating)
         end
       end
     end
