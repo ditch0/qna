@@ -339,7 +339,7 @@ RSpec.describe AnswersController, type: :controller do
 
         it 'returns updated voting info' do
           post method_name, params: { id: answer.id }, xhr: true
-          response_data = JSON.parse(response.body, {symbolize_names: true})
+          response_data = JSON.parse(response.body, symbolize_names: true)
           expect(response_data[:rating]).to eq(user_vote_value)
           expect(response_data[:user_vote]).to eq(user_vote_value)
         end
@@ -387,7 +387,7 @@ RSpec.describe AnswersController, type: :controller do
 
         it 'returns updated voting info' do
           post :reset_vote, params: { id: answer.id }, xhr: true
-          response_data = JSON.parse(response.body, {symbolize_names: true})
+          response_data = JSON.parse(response.body, symbolize_names: true)
           expect(response_data[:rating]).to eq(0)
           expect(response_data[:user_vote]).to be_nil
         end
