@@ -12,3 +12,18 @@
     background-color: #dfd;
   }
 }
+
+.rating-block {
+  .user-vote-info {
+    display: none;
+  }
+}
+
+.rating-block.voted {
+  .user-vote-info {
+    display: block;
+  }
+  .vote-buttons {
+    display: none;
+  }
+}

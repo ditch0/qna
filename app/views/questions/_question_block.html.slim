@@ -1,5 +1,8 @@
 h2= question.title
 p= question.body
+
+= render 'shared/rating_block', votable: question
+
 - if question.attachments.exists?
   ul.attachments
     - question.attachments.each do |attachment|

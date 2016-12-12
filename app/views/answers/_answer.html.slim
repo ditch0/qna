@@ -1,5 +1,8 @@
 div id="answer-#{answer.id}" class=(answer.is_best ? 'answer best-answer' : 'answer')
   p= answer.body
+
+  = render 'shared/rating_block', votable: answer
+
   - if answer.attachments.exists?
     ul.attachments
       - answer.attachments.each do |attachment|
