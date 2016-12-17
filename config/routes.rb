@@ -8,7 +8,7 @@ Rails.application.routes.draw do
 
   resources :questions, only: [:new, :create, :index, :show, :destroy, :update] do
     concerns :votable
-    resources :answers, shallow: true, only: [:new, :create, :destroy, :update] do
+    resources :answers, shallow: true, only: [:new, :create, :show, :destroy, :update] do
       concerns :votable
       post :set_is_best, on: :member
     end
