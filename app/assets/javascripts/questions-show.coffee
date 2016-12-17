@@ -1,3 +1,5 @@
+#= require channels/answers
+
 $(document).on 'turbolinks:load', ->
   $('.question-block').on 'click', '.edit-question-button', ->
     $('.question-form').show()

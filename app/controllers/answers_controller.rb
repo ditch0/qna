@@ -5,9 +5,10 @@ class AnswersController < ApplicationController
   before_action :set_answer, only: [:show, :destroy, :update, :set_is_best]
   before_action :ensure_current_user_is_answer_owner, only: [:destroy, :update]
   before_action :ensure_current_user_is_question_owner, only: [:set_is_best]
+  after_action :publish_answer, only: :create
 
   def show
-    render partial: 'answer', layout: false
+    render partial: 'answer', layout: false, locals: { answer: @answer }
   end
 
   def new
@@ -42,6 +43,11 @@ class AnswersController < ApplicationController
 
   def set_answer
     @answer = Answer.find(params[:id])
+  end
+
+  def publish_answer
+    return unless @answer.persisted?
+    ActionCable.server.broadcast "answers_#{@answer.question_id}", answer_id: @answer.id
   end
 
   def ensure_current_user_is_answer_owner

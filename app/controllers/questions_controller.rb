@@ -3,6 +3,7 @@ class QuestionsController < ApplicationController
 
   skip_before_action :authenticate_user!, only: [:index, :show]
   before_action :set_question, only: [:show, :destroy, :update, :set_best_answer]
+  before_action :add_question_id_to_gon, only: [:show]
   before_action :ensure_current_user_is_question_owner, only: [:destroy, :update, :set_best_answer]
   after_action :publish_question, only: [:create]
 
@@ -50,6 +51,10 @@ class QuestionsController < ApplicationController
 
   def set_question
     @question = Question.find(params[:id])
+  end
+
+  def add_question_id_to_gon
+    gon.question_id = @question.id
   end
 
   def publish_question
