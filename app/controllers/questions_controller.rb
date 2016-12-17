@@ -4,6 +4,7 @@ class QuestionsController < ApplicationController
   skip_before_action :authenticate_user!, only: [:index, :show]
   before_action :set_question, only: [:show, :destroy, :update, :set_best_answer]
   before_action :ensure_current_user_is_question_owner, only: [:destroy, :update, :set_best_answer]
+  after_action :publish_question, only: [:create]
 
   def index
     @questions = Question.all
@@ -49,6 +50,15 @@ class QuestionsController < ApplicationController
 
   def set_question
     @question = Question.find(params[:id])
+  end
+
+  def publish_question
+    return unless @question.persisted?
+    question_html = ApplicationController.render(
+      partial: 'questions/question',
+      locals: { question: @question }
+    )
+    ActionCable.server.broadcast 'questions', question_html
   end
 
   def ensure_current_user_is_question_owner
