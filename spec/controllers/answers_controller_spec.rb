@@ -4,6 +4,19 @@ RSpec.describe AnswersController, type: :controller do
   let(:question) { create(:question) }
 
   context 'guest user' do
+    describe 'GET #show' do
+      let!(:answer) { create(:answer) }
+      before { get :show, params: { id: answer.id } }
+
+      it 'renders answers/_answer view' do
+        expect(response).to render_template('answers/_answer')
+      end
+
+      it 'assigns @answer' do
+        expect(assigns(:answer)).to eq(answer)
+      end
+    end
+
     describe 'GET #new' do
       before { get :new, params: { question_id: question.id } }
 
