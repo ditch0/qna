@@ -20,7 +20,7 @@ feature 'User can answer a question' do
   scenario 'unauthorized user cannot see answer form' do
     visit question_path(question)
 
-    expect(page).not_to have_field('My answer')
+    expect(page).not_to have_field('Your answer')
     expect(page).not_to have_button('Submit')
   end
 
