@@ -18,7 +18,7 @@ RSpec.describe QuestionsController, type: :controller do
       let(:question) { create(:question) }
       before { get :show, params: { id: question.id } }
 
-      it 'renders index view' do
+      it 'renders show view' do
         expect(response).to render_template(:show)
       end
 
