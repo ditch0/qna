@@ -81,5 +81,4 @@ describe CommentsController do
   context 'commenting question' do
     it_behaves_like 'POST #create', :answer
   end
-
 end

@@ -15,7 +15,7 @@ class CommentsController < ApplicationController
   end
 
   def set_commentable
-    parent_resource_name = request.path.match(/\/(.+?)\//).captures.first
+    parent_resource_name = request.path.match(%r{/(.+?)/}).captures.first
     klass_name = parent_resource_name.singularize.camelize
     id_param_name = "#{parent_resource_name.singularize}_id"
     @commentable = klass_name.constantize.find(params[id_param_name])
@@ -29,12 +29,12 @@ class CommentsController < ApplicationController
 
   def find_question_id
     case @commentable
-      when Question
-        @commentable.id
-      when Answer
-        @commentable.question_id
-      else
-        raise Exception, 'Unsupported commentable type, cannot find question id'
+    when Question
+      @commentable.id
+    when Answer
+      @commentable.question_id
+    else
+      raise Exception, 'Unsupported commentable type, cannot find question id'
     end
   end
 end
