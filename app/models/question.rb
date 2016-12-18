@@ -1,6 +1,7 @@
 class Question < ApplicationRecord
   include Attachmentable
   include Votable
+  include Commentable
 
   validates :title, presence: true
   validates :body,  presence: true

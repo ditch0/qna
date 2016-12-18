@@ -1,0 +1,7 @@
+<% if @comment.persisted? %>
+  <% if @comment.commentable_type == 'Question' %>
+    $('.question-block .comments-block').find('textarea').val('');
+  <% elsif @comment.commentable_type == 'Answer' %>
+    $('#answer-<%= @comment.commentable_id %> .comments-block').find('textarea').val('');
+  <% end %>
+<% end %>

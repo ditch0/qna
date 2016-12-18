@@ -17,3 +17,5 @@ p= question.body
   p
     = button_tag 'Edit question', type: :button, class: 'edit-question-button'
   = render 'form', question: question, remote: true
+
+= render 'shared/comments_block', commentable: question

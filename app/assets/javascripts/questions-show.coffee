@@ -1,4 +1,5 @@
 #= require channels/answers
+#= require channels/comments
 
 $(document).on 'turbolinks:load', ->
   $('.question-block').on 'click', '.edit-question-button', ->
