@@ -7,8 +7,10 @@ feature 'User can answer a question' do
   scenario 'authorized user creates answer', js: true do
     sign_in user
     visit question_path(question)
-    fill_in 'Your answer', with: 'My answer'
-    click_on 'Submit'
+    within '.new-answer-form' do
+      fill_in 'Your answer', with: 'My answer'
+      click_on 'Submit'
+    end
 
     expect(page).to have_current_path(question_path(question))
     within '.answers-block' do
@@ -32,8 +34,10 @@ feature 'User can answer a question' do
     Capybara.using_session('user who creates answer') do
       sign_in user
       visit question_path(question)
-      fill_in 'Your answer', with: 'My answer'
-      click_on 'Submit'
+      within '.new-answer-form' do
+        fill_in 'Your answer', with: 'My answer'
+        click_on 'Submit'
+      end
     end
 
     Capybara.using_session('user who is expected to see new answer') do
@@ -51,7 +55,9 @@ feature 'User can answer a question' do
     Capybara.using_session('user who creates answer') do
       sign_in user
       visit question_path(question)
-      click_on 'Submit'
+      within '.new-answer-form' do
+        click_on 'Submit'
+      end
     end
 
     Capybara.using_session('user who is expected not to see new answer') do
