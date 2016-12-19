@@ -34,6 +34,7 @@ gem 'remotipart'
 gem 'cocoon'
 gem 'sqlite3'
 gem 'gon'
+gem 'skim'
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
