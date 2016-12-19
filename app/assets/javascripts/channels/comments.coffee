@@ -1,4 +1,4 @@
-App.questions = App.cable.subscriptions.create { channel: 'CommentsChannel', question_id: gon.question_id.toString() },
+App.questions = App.cable.subscriptions.create { channel: 'CommentsChannel', question_id: gon.question.id.toString() },
   received: (comment) ->
     $commentsList = if comment.commentable_type == 'Question'
       $('.question-block .comments')

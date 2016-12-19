@@ -1,0 +1,6 @@
+form method="post" action="/answers/#{@answer.id}" data-remote="true"
+  input type="hidden" name="_method" value="delete"
+  input type="submit" value="Delete answer"
+
+button.edit-answer-button type="button" Edit answer
+== App.utils.render('answers/_edit_form', answer: @answer)

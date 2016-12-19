@@ -16,3 +16,4 @@
 //= require jquery.remotipart
 //= require cocoon
 //= require cable
+//= require utils

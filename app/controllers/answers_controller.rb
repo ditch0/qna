@@ -42,7 +42,7 @@ class AnswersController < ApplicationController
 
   def publish_answer
     return unless @answer.persisted?
-    ActionCable.server.broadcast "answers_#{@answer.question_id}", answer_id: @answer.id
+    ActionCable.server.broadcast "answers_#{@answer.question_id}", answer: @answer, attachments: @answer.attachments
   end
 
   def ensure_current_user_is_answer_owner

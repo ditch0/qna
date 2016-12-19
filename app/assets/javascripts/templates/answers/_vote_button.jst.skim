@@ -1,0 +1,2 @@
+form.vote-form method="post" action="/answers/#{@id}/#{@action}" data-remote="true"
+  input format="json" type="submit" value="#{@title}"

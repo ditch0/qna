@@ -1,7 +1,6 @@
-App.questions = App.cable.subscriptions.create { channel: 'AnswersChannel', question_id: gon.question_id.toString() },
+#= require_tree ../templates/answers
+
+App.questions = App.cable.subscriptions.create { channel: 'AnswersChannel', question_id: gon.question.id.toString() },
   received: (data) ->
-    answerId = data.answer_id
-    return unless answerId
-    $.get "/answers/#{answerId}",
-      null,
-      (responseHtml) -> $('.answers-block').append(responseHtml)
+    answerHtml = App.utils.render('answers/answer', answer: data.answer, question: gon.question, attachments: data.attachments)
+    $('.answers-block').append(answerHtml)

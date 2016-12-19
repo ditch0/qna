@@ -1,0 +1,7 @@
+form action="/answers/#{@answer.id}/comments" accept-charset="UTF-8" data-remote="true" method="post"
+  input name="utf8" type="hidden" value="✓"
+  p
+    label for="comment_body" Your comment
+    textarea name="comment[body]" id="comment_body"
+    input value="Answer" type="hidden" name="comment[commentable]"
+    input type="submit" name="commit" value="Submit" data-disable-with="Submit"
