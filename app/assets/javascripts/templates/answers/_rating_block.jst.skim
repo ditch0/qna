@@ -1,0 +1,6 @@
+.rating-block
+  .rating 0
+  - if gon.user_id && gon.user_id != @answer.user_id
+    .vote-buttons
+      == App.utils.render('answers/_vote_button', action: 'vote_up',   id: @answer.id, title: 'Vote up')
+      == App.utils.render('answers/_vote_button', action: 'vote_down', id: @answer.id, title: 'Vote down')

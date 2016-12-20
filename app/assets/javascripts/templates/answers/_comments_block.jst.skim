@@ -1,0 +1,4 @@
+h3 Comments
+ul.comment
+- if gon.user_id
+  == App.utils.render('answers/_comment_form', answer: @answer)

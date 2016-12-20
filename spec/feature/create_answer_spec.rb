@@ -7,8 +7,10 @@ feature 'User can answer a question' do
   scenario 'authorized user creates answer', js: true do
     sign_in user
     visit question_path(question)
-    fill_in 'Your answer', with: 'My answer'
-    click_on 'Submit'
+    within '.new-answer-form' do
+      fill_in 'Your answer', with: 'My answer'
+      click_on 'Submit'
+    end
 
     expect(page).to have_current_path(question_path(question))
     within '.answers-block' do
@@ -20,7 +22,46 @@ feature 'User can answer a question' do
   scenario 'unauthorized user cannot see answer form' do
     visit question_path(question)
 
-    expect(page).not_to have_field('My answer')
+    expect(page).not_to have_field('Your answer')
     expect(page).not_to have_button('Submit')
+  end
+
+  scenario "user creates an answer and it immediately appears on other user's page", :js do
+    Capybara.using_session('user who is expected to see new answer') do
+      visit question_path(question)
+    end
+
+    Capybara.using_session('user who creates answer') do
+      sign_in user
+      visit question_path(question)
+      within '.new-answer-form' do
+        fill_in 'Your answer', with: 'My answer'
+        click_on 'Submit'
+      end
+    end
+
+    Capybara.using_session('user who is expected to see new answer') do
+      within '.answers-block' do
+        expect(page).to have_content('My answer')
+      end
+    end
+  end
+
+  scenario "user fails to create an answer and it does not appear on other user's page", :js do
+    Capybara.using_session('user who is expected not to see new answer') do
+      visit question_path(question)
+    end
+
+    Capybara.using_session('user who creates answer') do
+      sign_in user
+      visit question_path(question)
+      within '.new-answer-form' do
+        click_on 'Submit'
+      end
+    end
+
+    Capybara.using_session('user who is expected not to see new answer') do
+      expect(page).not_to have_css('.answer')
+    end
   end
 end

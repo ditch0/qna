@@ -15,4 +15,5 @@
 //= require turbolinks
 //= require jquery.remotipart
 //= require cocoon
-//= require_tree .
+//= require cable
+//= require utils

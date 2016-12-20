@@ -6,6 +6,7 @@ RSpec.configure do |config|
   config.include FeatureMacros, type: :feature
 
   Capybara.javascript_driver = :poltergeist
+  Capybara.server = :puma
   Capybara.server_port = 3030
 
   config.before(:suite) do

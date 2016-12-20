@@ -1,0 +1,7 @@
+ul.attachments
+  - for attachment in @attachments
+    li
+      a href="#{attachment.file.url}" = App.utils.extractFileNameFromUrl(attachment.file.url)
+      - if gon.user_id == @answer.user_id
+        - deleteUrl = encodeURI("/answers/#{@answer.id}?answer[attachments_attributes][_destroy]=true&answer[attachments_attributes][id]=#{attachment.id}").replace('&', '&amp;')
+        a data-remote="true" rel="nofollow" data-method="patch" href="#{deleteUrl}" Delete

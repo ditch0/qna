@@ -1,0 +1,16 @@
+div id="answer-#{@answer.id}" class=(if @answer.is_best then 'answer best-answer' else 'answer')
+  p= @answer.body
+
+  == App.utils.render('answers/_rating_block', answer: @answer)
+
+  -if @attachments.length > 0
+    == App.utils.render('answers/_attachments', answer: @answer, attachments: @attachments)
+
+  - if gon.user_id
+    - if gon.user_id == @question.user_id && !@answer.is_best
+      == App.utils.render('answers/_best_answer_button', answer: @answer, question: @question)
+
+    - if gon.user_id == @answer.user_id
+      == App.utils.render('answers/_actions', answer: @answer)
+
+  == App.utils.render('answers/_comments_block', answer: @answer)

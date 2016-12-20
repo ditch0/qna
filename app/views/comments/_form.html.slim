@@ -1,0 +1,6 @@
+= form_for [commentable, commentable.comments.build], remote: true do |f|
+  p
+    = f.label :body, 'Your comment'
+    = f.text_area :body
+    = f.hidden_field :commentable, value: commentable.class.name
+    = f.submit 'Submit'

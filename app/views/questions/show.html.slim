@@ -7,3 +7,6 @@ h3 Answers
 
 - if user_signed_in?
   = render 'answers/form', answer: @answer
+
+= content_for :scripts
+  = javascript_include_tag 'questions-show'

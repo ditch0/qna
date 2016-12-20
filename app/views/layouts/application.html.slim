@@ -2,9 +2,12 @@ doctype html
 html
   head
     title Qna
+    = Gon::Base.render_data
     = csrf_meta_tags
+    = action_cable_meta_tag
     = stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload'
     = javascript_include_tag 'application', 'data-turbolinks-track': 'reload'
+    = yield :scripts
   body[class="#{controller_name}-#{action_name}"]
     - if user_signed_in?
       p =link_to 'Sign out', destroy_user_session_path, method: :delete

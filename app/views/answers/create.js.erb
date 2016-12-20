@@ -1,5 +1,4 @@
 <% if @answer.persisted? %>
-  $('.answers-block').append('<%= j render @answer %>');
   $('.new-answer-form').find('textarea').val('');
   $('.new-answer-form .nested-fields').remove();
 <% end %>

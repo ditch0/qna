@@ -4,6 +4,7 @@ class AnswersController < ApplicationController
   before_action :set_answer, only: [:destroy, :update, :set_is_best]
   before_action :ensure_current_user_is_answer_owner, only: [:destroy, :update]
   before_action :ensure_current_user_is_question_owner, only: [:set_is_best]
+  after_action :publish_answer, only: :create
 
   def new
     @answer = Answer.new
@@ -37,6 +38,11 @@ class AnswersController < ApplicationController
 
   def set_answer
     @answer = Answer.find(params[:id])
+  end
+
+  def publish_answer
+    return unless @answer.persisted?
+    ActionCable.server.broadcast "answers_#{@answer.question_id}", answer: @answer, attachments: @answer.attachments
   end
 
   def ensure_current_user_is_answer_owner

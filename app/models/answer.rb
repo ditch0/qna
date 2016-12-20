@@ -1,6 +1,7 @@
 class Answer < ApplicationRecord
   include Attachmentable
   include Votable
+  include Commentable
 
   validates :body, presence: true
   belongs_to :user
