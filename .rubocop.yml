@@ -23,6 +23,7 @@ Style/Documentation:
   Exclude:
     - 'app/**/*'
     - 'spec/**/*'
+    - 'lib/**/*'
 
 Style/BlockComments:
   Exclude:
