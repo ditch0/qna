@@ -6,28 +6,30 @@ class AnswersController < ApplicationController
   before_action :ensure_current_user_is_question_owner, only: [:set_is_best]
   after_action :publish_answer, only: :create
 
+  respond_to :js
+
   def new
-    @answer = Answer.new
+    respond_with(@answer = Answer.new)
   end
 
   def create
-    @question = Question.find(params[:question_id])
-    @answer = @question.answers.build(answer_params)
-    @answer.user = current_user
-    @answer.save
+    @answer = current_user.answers.create(answer_params.merge(question_id: params[:question_id]))
+    respond_with(@answer)
   end
 
   def destroy
-    @answer.destroy
+    respond_with @answer.destroy
   end
 
   def update
-    @answer.update(answer_params)
+    respond_with @answer.update(answer_params)
   end
 
   def set_is_best
-    @answer.update_is_best(params[:is_best])
-    @answers = @answer.question.answers.best_and_newest_order
+    respond_with(
+      @answer.update_is_best(params[:is_best]),
+      @answers = @answer.question.answers.best_and_newest_order
+    )
   end
 
   private
