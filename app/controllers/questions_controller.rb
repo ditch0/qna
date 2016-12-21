@@ -7,40 +7,32 @@ class QuestionsController < ApplicationController
   before_action :ensure_current_user_is_question_owner, only: [:destroy, :update, :set_best_answer]
   after_action :publish_question, only: [:create]
 
+  respond_to :html
+  respond_to :js, only: :update
+
   def index
-    @questions = Question.all
+    respond_with(@questions = Question.all)
   end
 
   def show
-    @answer = @question.answers.build
-    @answers = @question.answers.best_and_newest_order
+    respond_with @question
   end
 
   def new
-    @question = Question.new
+    respond_with(@question = Question.new)
   end
 
   def create
-    @question = Question.new(question_params)
-    @question.user = current_user
-    if @question.save
-      redirect_to questions_url
-    else
-      render :new
-    end
+    @question = current_user.questions.create(question_params)
+    respond_with @question, location: questions_url
   end
 
   def destroy
-    @question.destroy
-    if @question.destroyed?
-      redirect_to questions_url, notice: 'Question is deleted.'
-    else
-      redirect_to @question, alert: 'Cannot delete question.'
-    end
+    respond_with @question.destroy
   end
 
   def update
-    @question.update(question_params)
+    respond_with @question.update(question_params)
   end
 
   private

@@ -3,10 +3,10 @@
 
 h3 Answers
 .answers-block
-  = render 'answers/answers', answers: @answers
+  = render 'answers/answers', answers: @question.answers.best_and_newest_order
 
 - if user_signed_in?
-  = render 'answers/form', answer: @answer
+  = render 'answers/form', answer: @question.answers.build
 
 = content_for :scripts
   = javascript_include_tag 'questions-show'
