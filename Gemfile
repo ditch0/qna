@@ -65,6 +65,7 @@ group :development do
   gem 'guard-bundler', require: false
   gem 'guard-rails', require: false
   gem 'guard-spring', require: false
+  gem 'letter_opener'
 end
 
 group :test do
