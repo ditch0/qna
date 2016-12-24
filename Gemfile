@@ -37,6 +37,10 @@ gem 'gon'
 gem 'skim'
 gem 'responders'
 
+gem 'omniauth'
+gem 'omniauth-facebook'
+gem 'omniauth-twitter'
+
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
