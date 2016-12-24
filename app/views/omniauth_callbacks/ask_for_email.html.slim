@@ -1,0 +1,6 @@
+= form_for @user, url: { controller: 'omniauth_callbacks', action: 'proceed_with_email' } do |f|
+  p
+    = f.label :email, 'Please fill in the email'
+    = f.text_field :email
+  p
+    = f.submit 'Sign in'
