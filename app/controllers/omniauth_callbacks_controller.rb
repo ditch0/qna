@@ -8,11 +8,11 @@ class OmniauthCallbacksController < Devise::OmniauthCallbacksController
   end
 
   def proceed_with_email
-    user = User.new(user_params)
+    email = params.require(:user).fetch(:email)
     auth_hash = OmniAuth::AuthHash.new(
       provider: session[:oauth_provider],
       uid: session[:oauth_uid],
-      info: { email: user.email }
+      info: { email: email }
     )
     sign_in_by_auth(auth_hash)
   end
@@ -37,9 +37,5 @@ class OmniauthCallbacksController < Devise::OmniauthCallbacksController
       twitter:  'Twitter'
     }
     providers[provider.to_sym]
-  end
-
-  def user_params
-    params.require(:user).permit(:email)
   end
 end
