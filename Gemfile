@@ -37,6 +37,10 @@ gem 'gon'
 gem 'skim'
 gem 'responders'
 
+gem 'omniauth'
+gem 'omniauth-facebook'
+gem 'omniauth-twitter'
+
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
@@ -65,6 +69,7 @@ group :development do
   gem 'guard-bundler', require: false
   gem 'guard-rails', require: false
   gem 'guard-spring', require: false
+  gem 'letter_opener'
 end
 
 group :test do
