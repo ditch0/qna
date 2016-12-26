@@ -2,9 +2,9 @@ class AnswersController < ApplicationController
   include CanVote
 
   before_action :set_answer, only: [:destroy, :update, :set_is_best]
-  before_action :ensure_current_user_is_answer_owner, only: [:destroy, :update]
-  before_action :ensure_current_user_is_question_owner, only: [:set_is_best]
   after_action :publish_answer, only: :create
+
+  authorize_resource
 
   respond_to :js
 
@@ -45,16 +45,6 @@ class AnswersController < ApplicationController
   def publish_answer
     return unless @answer.persisted?
     ActionCable.server.broadcast "answers_#{@answer.question_id}", answer: @answer, attachments: @answer.attachments
-  end
-
-  def ensure_current_user_is_answer_owner
-    return if @answer.user_id == current_user.id
-    respond_with_forbidden
-  end
-
-  def ensure_current_user_is_question_owner
-    return if @answer.question.user_id == current_user.id
-    respond_with_forbidden
   end
 
   def respond_with_forbidden
