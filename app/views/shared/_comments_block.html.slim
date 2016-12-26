@@ -4,5 +4,5 @@
     - commentable.comments.each do |comment|
       li= comment.body
 
-  - if user_signed_in?
+  - if can?(:create, Comment)
     = render 'comments/form', commentable: commentable

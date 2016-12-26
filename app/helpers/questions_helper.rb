@@ -18,12 +18,4 @@ module QuestionsHelper
     )
     link_to('Delete', path, remote: true, method: :patch)
   end
-
-  def user_is_question_owner?(question)
-    user_signed_in? && question.user_id == current_user.id
-  end
-
-  def user_is_answer_owner?(answer)
-    user_signed_in? && answer.user_id == current_user.id
-  end
 end

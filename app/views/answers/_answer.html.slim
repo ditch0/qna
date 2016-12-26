@@ -8,13 +8,14 @@ div id="answer-#{answer.id}" class=(answer.is_best ? 'answer best-answer' : 'ans
       - answer.attachments.each do |attachment|
         li
           = link_to attachment.file.identifier, attachment.file.url
-          - if user_is_answer_owner?(answer)
+          - if can?(:update, answer)
             = delete_attachment_link(attachment)
 
-  - if user_is_question_owner?(answer.question) && !answer.is_best
+  - if can?(:set_is_best, answer) && !answer.is_best
     = best_answer_button(answer)
-  - if user_is_answer_owner?(answer)
+  - if can?(:destroy, answer)
     = button_to 'Delete answer', answer_path(answer), remote: true, method: :delete
+  - if can?(:update, answer)
     = button_tag 'Edit answer', type: :button, class: 'edit-answer-button'
     = render 'answers/form', answer: answer
 
