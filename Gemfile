@@ -36,6 +36,7 @@ gem 'sqlite3'
 gem 'gon'
 gem 'skim'
 gem 'responders'
+gem 'cancancan'
 
 gem 'omniauth'
 gem 'omniauth-facebook'
