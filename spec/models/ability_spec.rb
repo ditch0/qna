@@ -72,7 +72,7 @@ describe Ability do
       it { should_not be_able_to :set_is_best, create(:answer, question: other_users_question), user: user }
     end
 
-    context 'answers' do
+    context 'comments' do
       it { should be_able_to :create, Comment }
     end
   end
