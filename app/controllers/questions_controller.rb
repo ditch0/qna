@@ -4,8 +4,9 @@ class QuestionsController < ApplicationController
   skip_before_action :authenticate_user!, only: [:index, :show]
   before_action :set_question, only: [:show, :destroy, :update, :set_best_answer]
   before_action :add_data_to_gon, only: [:show]
-  before_action :ensure_current_user_is_question_owner, only: [:destroy, :update, :set_best_answer]
   after_action :publish_question, only: [:create]
+
+  authorize_resource
 
   respond_to :html
   respond_to :js, only: :update
@@ -57,13 +58,5 @@ class QuestionsController < ApplicationController
       locals: { question: @question }
     )
     ActionCable.server.broadcast 'questions', question_html
-  end
-
-  def ensure_current_user_is_question_owner
-    return if @question.user_id == current_user.id
-    respond_to do |format|
-      format.html { redirect_to @question, alert: 'Not allowed.' }
-      format.js { head :forbidden }
-    end
   end
 end

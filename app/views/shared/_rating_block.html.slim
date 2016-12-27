@@ -1,7 +1,7 @@
 - vote = votable.find_vote_by_user(current_user) if user_signed_in?
 div class=(vote ? 'rating-block voted' : 'rating-block')
   .rating = votable.rating
-  - if user_signed_in? && votable.user_id != current_user.id
+  - if can?(:vote_up, votable)
     .vote-buttons
       = button_to 'Vote up', polymorphic_path([:vote_up, votable]), method: :post, remote: true, format: :json, form_class: 'vote-form'
       = button_to 'Vote down', polymorphic_path([:vote_down, votable]), method: :post, remote: true, form_class: 'vote-form'

@@ -8,12 +8,13 @@ p= question.body
     - question.attachments.each do |attachment|
       li
         = link_to attachment.file.identifier, attachment.file.url
-        - if user_is_question_owner?(question)
+        - if can?(:update, question)
           = delete_attachment_link(attachment)
 
-- if user_is_question_owner?(question)
+- if can?(:destroy, question)
   p
     = button_to 'Delete question', question_path(question), method: :delete
+- if can?(:update, question)
   p
     = button_tag 'Edit question', type: :button, class: 'edit-question-button'
   = render 'form', question: question, remote: true

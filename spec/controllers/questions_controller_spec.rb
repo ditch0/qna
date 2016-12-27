@@ -200,9 +200,9 @@ RSpec.describe QuestionsController, type: :controller do
       context 'other user\' question' do
         let!(:question) { create(:question) }
 
-        it 'redirects to question page' do
+        it 'redirects to home page' do
           delete :destroy, params: { id: question.id }
-          expect(response).to redirect_to(question_url(question))
+          expect(response).to redirect_to(root_url)
           expect(flash[:alert]).to eq('Not allowed.')
         end
 
