@@ -37,6 +37,7 @@ gem 'gon'
 gem 'skim'
 gem 'responders'
 gem 'cancancan'
+gem 'doorkeeper'
 
 gem 'omniauth'
 gem 'omniauth-facebook'
@@ -78,6 +79,7 @@ group :test do
   gem 'capybara'
   gem 'launchy'
   gem 'orderly'
+  gem 'json_spec'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
