@@ -1,7 +1,9 @@
 module Api
   module V1
     class AnswersController < Api::V1::ApiController
+      authorize_resource
       before_action :set_question, only: [:index, :create]
+
       def index
         respond_with @question.answers.order(id: :asc)
       end

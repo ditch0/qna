@@ -1,6 +1,8 @@
 module Api
   module V1
     class QuestionsController < Api::V1::ApiController
+      authorize_resource
+
       def index
         respond_with Question.all, each_serializer: QuestionSerializer
       end
