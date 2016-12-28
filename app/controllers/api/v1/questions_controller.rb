@@ -10,8 +10,7 @@ module Api
       end
 
       def create
-        question = current_resource_owner.questions.create(question_params)
-        respond_with question
+        respond_with current_resource_owner.questions.create(question_params)
       end
 
       private
