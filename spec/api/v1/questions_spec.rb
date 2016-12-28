@@ -93,5 +93,22 @@ describe 'Questions API' do
         end.to change(Question, :count).by(1)
       end
     end
+
+    context 'invalid question' do
+      let(:request_params) do
+        { question: { title: '', body: 'A question' }, access_token: access_token.token }
+      end
+
+      it 'returns status 422 Unprocessable Entity' do
+        post '/api/v1/questions.json', params: request_params
+        expect(response).to have_http_status(422)
+      end
+
+      it 'does not create question' do
+        expect do
+          post '/api/v1/questions.json', params: request_params
+        end.not_to change(Question, :count)
+      end
+    end
   end
 end
