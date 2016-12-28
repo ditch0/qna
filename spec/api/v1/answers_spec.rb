@@ -38,7 +38,7 @@ describe 'Answers API' do
     let!(:comments) { create_list(:comment, 4, commentable: answer) }
 
     before do
-      get "/api/v1/answers/#{answer.id}.json", params: {access_token: access_token.token }
+      get "/api/v1/answers/#{answer.id}.json", params: { access_token: access_token.token }
     end
 
     it 'returns status 200' do
