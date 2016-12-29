@@ -1,15 +1,14 @@
 module Api
   module V1
     class AnswersController < Api::V1::ApiController
-      authorize_resource
-      before_action :set_question, only: [:index, :create]
+      load_and_authorize_resource
 
       def index
-        respond_with @question.answers.order(id: :asc)
+        respond_with @answers
       end
 
       def show
-        respond_with Answer.find(params[:id]), serializer: DetailedAnswerSerializer
+        respond_with @answer, serializer: DetailedAnswerSerializer
       end
 
       def create
@@ -18,10 +17,6 @@ module Api
       end
 
       private
-
-      def set_question
-        @question = Question.find(params[:question_id])
-      end
 
       def answer_params
         params.require(:answer).permit(:body)
