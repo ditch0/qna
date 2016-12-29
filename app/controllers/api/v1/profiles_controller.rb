@@ -1,6 +1,8 @@
 module Api
   module V1
     class ProfilesController < Api::V1::ApiController
+      authorize_resource class: false
+
       def me
         respond_with current_resource_owner
       end

@@ -25,5 +25,7 @@ module Qna
                        request_specs: false
       g.fixture_replacement :factory_girl, dir: 'spec/factories'
     end
+
+    ActiveModelSerializers.config.adapter = :json
   end
 end

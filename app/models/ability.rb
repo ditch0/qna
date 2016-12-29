@@ -23,6 +23,7 @@ class Ability
     can :set_is_best, Answer do |answer|
       answer.question.user_id == user.id
     end
+    can :me, :profile
   end
 
   def guest_abilities
