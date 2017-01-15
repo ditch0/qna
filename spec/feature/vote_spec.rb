@@ -5,7 +5,7 @@ feature 'Voting' do
     given!(:user) { create(:user) }
     given!(:votable) { create(votable_factory) }
     given!(:votable_owned_by_user) { create(votable_factory, user: user) }
-    
+
     def question_page_path(votable)
       question = votable.is_a?(Question) ? votable : votable.question
       question_path(question)
