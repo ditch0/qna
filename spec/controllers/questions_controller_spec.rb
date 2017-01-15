@@ -290,51 +290,12 @@ RSpec.describe QuestionsController, type: :controller do
       end
     end
 
-    shared_examples_for 'a vote method' do |method_name, user_vote_value|
-      context 'question by other user' do
-        let!(:question) { create(:question) }
-
-        it 'renders json' do
-          post method_name, params: { id: question.id }, xhr: true
-          expect(response.header['Content-Type']).to include('application/json')
-        end
-
-        it 'returns updated voting info' do
-          post method_name, params: { id: question.id }, xhr: true
-          response_data = JSON.parse(response.body, symbolize_names: true)
-          expect(response_data[:rating]).to eq(user_vote_value)
-          expect(response_data[:user_vote]).to eq(user_vote_value)
-        end
-
-        it 'updates rating in database' do
-          expect do
-            post method_name, params: { id: question.id }, xhr: true
-          end.to change(question, :rating).by(user_vote_value)
-        end
-      end
-
-      context 'question by same user' do
-        let!(:question) { create(:question, user: @user) }
-
-        it 'return 403 Forbidden' do
-          post method_name, params: { id: question.id }, xhr: true
-          expect(response).to have_http_status(403)
-        end
-
-        it 'does not update question rating in database' do
-          expect do
-            post method_name, params: { id: question.id }, xhr: true
-          end.not_to change(question, :rating)
-        end
-      end
-    end
-
     describe 'POST #vote_up' do
-      it_behaves_like 'a vote method', 'vote_up', 1
+      it_behaves_like 'vote action', 'vote_up', 1, :question
     end
 
     describe 'POST #vote_down' do
-      it_behaves_like 'a vote method', 'vote_down', -1
+      it_behaves_like 'vote action', 'vote_down', -1, :question
     end
 
     describe 'POST #reset_vote' do
