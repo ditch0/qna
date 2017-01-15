@@ -1,4 +1,4 @@
-shared_examples_for 'votable controller' do |votable_factory|
+shared_examples_for 'votable controller with authenticated user' do |votable_factory|
   describe 'POST #vote_up' do
     it_behaves_like 'vote action', 'vote_up', 1, votable_factory
   end

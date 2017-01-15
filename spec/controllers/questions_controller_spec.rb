@@ -90,32 +90,7 @@ RSpec.describe QuestionsController, type: :controller do
       end
     end
 
-    describe 'POST #vote_up' do
-      let!(:question) { create(:question) }
-
-      it 'return 401 Unauthorized' do
-        post :vote_up, params: { id: question.id }, xhr: true
-        expect(response).to have_http_status(401)
-      end
-    end
-
-    describe 'POST #vote_down' do
-      let!(:question) { create(:question) }
-
-      it 'return 401 Unauthorized' do
-        post :vote_down, params: { id: question.id }, xhr: true
-        expect(response).to have_http_status(401)
-      end
-    end
-
-    describe 'POST #reset_vote' do
-      let!(:question) { create(:question) }
-
-      it 'return 401 Unauthorized' do
-        post :reset_vote, params: { id: question.id }, xhr: true
-        expect(response).to have_http_status(401)
-      end
-    end
+    it_behaves_like 'votable controller with guest user', :question
   end
 
   context 'authenticated user' do
@@ -301,6 +276,6 @@ RSpec.describe QuestionsController, type: :controller do
       end
     end
 
-    it_behaves_like 'votable controller', :question
+    it_behaves_like 'votable controller with authenticated user', :question
   end
 end
