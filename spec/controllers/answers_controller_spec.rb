@@ -328,52 +328,6 @@ RSpec.describe AnswersController, type: :controller do
       end
     end
 
-    describe 'POST #vote_up' do
-      it_behaves_like 'vote action', 'vote_up', 1, :answer
-    end
-
-    describe 'POST #vote_down' do
-      it_behaves_like 'vote action', 'vote_down', -1, :answer
-    end
-
-    describe 'POST #reset_vote' do
-      context 'answer by other user' do
-        let!(:answer) { create(:answer) }
-        before { answer.vote_up(@user) }
-
-        it 'renders json' do
-          post :reset_vote, params: { id: answer.id }, xhr: true
-          expect(response.header['Content-Type']).to include('application/json')
-        end
-
-        it 'returns updated voting info' do
-          post :reset_vote, params: { id: answer.id }, xhr: true
-          response_data = JSON.parse(response.body, symbolize_names: true)
-          expect(response_data[:rating]).to eq(0)
-          expect(response_data[:user_vote]).to be_nil
-        end
-
-        it 'updates rating in database' do
-          expect do
-            post :reset_vote, params: { id: answer.id }, xhr: true
-          end.to change(answer, :rating).by(-1)
-        end
-      end
-
-      context 'answer by same user' do
-        let!(:answer) { create(:answer, user: @user) }
-
-        it 'return 403 Forbidden' do
-          post :reset_vote, params: { id: answer.id }, xhr: true
-          expect(response).to have_http_status(403)
-        end
-
-        it 'does not update answer rating in database' do
-          expect do
-            post :reset_vote, params: { id: answer.id }, xhr: true
-          end.not_to change(answer, :rating)
-        end
-      end
-    end
+    it_behaves_like 'votable controller', :answer
   end
 end
