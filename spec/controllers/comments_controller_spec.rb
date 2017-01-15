@@ -75,6 +75,11 @@ describe CommentsController do
               post :create, params: invalid_comment_params, xhr: true
             end.not_to change(Comment, :count)
           end
+
+          it 'does not publishe comment to ActionCable' do
+            expect(ActionCable.server).not_to receive(:broadcast)
+            post :create, params: invalid_comment_params, xhr: true
+          end
         end
       end
     end

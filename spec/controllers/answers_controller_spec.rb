@@ -176,6 +176,11 @@ RSpec.describe AnswersController, type: :controller do
           post :create, params: answer_params, xhr: true
           expect(response).to render_template(:create)
         end
+
+        it 'does not publish answer to ActionCable' do
+          expect(ActionCable.server).not_to receive(:broadcast)
+          post :create, params: answer_params, xhr: true
+        end
       end
     end
 

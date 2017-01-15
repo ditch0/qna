@@ -167,7 +167,7 @@ RSpec.describe QuestionsController, type: :controller do
 
         it 'publishes question to ActionCable' do
           allow(ApplicationController).to receive(:render) { 'rendered question' }
-          expect(ActionCable.server).to receive(:broadcast).with('questions', 'rendered question');
+          expect(ActionCable.server).to receive(:broadcast).with('questions', 'rendered question')
           post :create, params: { question: attributes_for(:question) }
         end
       end
@@ -182,6 +182,11 @@ RSpec.describe QuestionsController, type: :controller do
         it 'renders new view' do
           post :create, params: { question: attributes_for(:invalid_question) }
           expect(response).to render_template(:new)
+        end
+
+        it 'does not publish question to ActionCable' do
+          expect(ActionCable.server).not_to receive(:broadcast)
+          post :create, params: { question: attributes_for(:invalid_question) }
         end
       end
     end
