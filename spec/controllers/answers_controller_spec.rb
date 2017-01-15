@@ -156,6 +156,11 @@ RSpec.describe AnswersController, type: :controller do
           post :create, params: answer_params, xhr: true
           expect(response).to render_template(:create)
         end
+
+        it 'publishes answer to ActionCable' do
+          expect(ActionCable.server).to receive(:broadcast).with("answers_#{question.id}", anything)
+          post :create, params: answer_params, xhr: true
+        end
       end
 
       context 'invalid answer' do

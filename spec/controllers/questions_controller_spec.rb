@@ -164,6 +164,12 @@ RSpec.describe QuestionsController, type: :controller do
           post :create, params: { question: attributes_for(:question) }
           expect(response).to redirect_to(questions_url)
         end
+
+        it 'publishes question to ActionCable' do
+          allow(ApplicationController).to receive(:render) { 'rendered question' }
+          expect(ActionCable.server).to receive(:broadcast).with('questions', 'rendered question');
+          post :create, params: { question: attributes_for(:question) }
+        end
       end
 
       context 'invalid question' do
