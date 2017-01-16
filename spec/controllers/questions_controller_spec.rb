@@ -90,32 +90,7 @@ RSpec.describe QuestionsController, type: :controller do
       end
     end
 
-    describe 'POST #vote_up' do
-      let!(:question) { create(:question) }
-
-      it 'return 401 Unauthorized' do
-        post :vote_up, params: { id: question.id }, xhr: true
-        expect(response).to have_http_status(401)
-      end
-    end
-
-    describe 'POST #vote_down' do
-      let!(:question) { create(:question) }
-
-      it 'return 401 Unauthorized' do
-        post :vote_down, params: { id: question.id }, xhr: true
-        expect(response).to have_http_status(401)
-      end
-    end
-
-    describe 'POST #reset_vote' do
-      let!(:question) { create(:question) }
-
-      it 'return 401 Unauthorized' do
-        post :reset_vote, params: { id: question.id }, xhr: true
-        expect(response).to have_http_status(401)
-      end
-    end
+    it_behaves_like 'votable controller with guest user', :question
   end
 
   context 'authenticated user' do
@@ -164,6 +139,12 @@ RSpec.describe QuestionsController, type: :controller do
           post :create, params: { question: attributes_for(:question) }
           expect(response).to redirect_to(questions_url)
         end
+
+        it 'publishes question to ActionCable' do
+          allow(ApplicationController).to receive(:render) { 'rendered question' }
+          expect(ActionCable.server).to receive(:broadcast).with('questions', 'rendered question')
+          post :create, params: { question: attributes_for(:question) }
+        end
       end
 
       context 'invalid question' do
@@ -176,6 +157,11 @@ RSpec.describe QuestionsController, type: :controller do
         it 'renders new view' do
           post :create, params: { question: attributes_for(:invalid_question) }
           expect(response).to render_template(:new)
+        end
+
+        it 'does not publish question to ActionCable' do
+          expect(ActionCable.server).not_to receive(:broadcast)
+          post :create, params: { question: attributes_for(:invalid_question) }
         end
       end
     end
@@ -290,91 +276,6 @@ RSpec.describe QuestionsController, type: :controller do
       end
     end
 
-    shared_examples_for 'a vote method' do |method_name, user_vote_value|
-      context 'question by other user' do
-        let!(:question) { create(:question) }
-
-        it 'renders json' do
-          post method_name, params: { id: question.id }, xhr: true
-          expect(response.header['Content-Type']).to include('application/json')
-        end
-
-        it 'returns updated voting info' do
-          post method_name, params: { id: question.id }, xhr: true
-          response_data = JSON.parse(response.body, symbolize_names: true)
-          expect(response_data[:rating]).to eq(user_vote_value)
-          expect(response_data[:user_vote]).to eq(user_vote_value)
-        end
-
-        it 'updates rating in database' do
-          expect do
-            post method_name, params: { id: question.id }, xhr: true
-          end.to change(question, :rating).by(user_vote_value)
-        end
-      end
-
-      context 'question by same user' do
-        let!(:question) { create(:question, user: @user) }
-
-        it 'return 403 Forbidden' do
-          post method_name, params: { id: question.id }, xhr: true
-          expect(response).to have_http_status(403)
-        end
-
-        it 'does not update question rating in database' do
-          expect do
-            post method_name, params: { id: question.id }, xhr: true
-          end.not_to change(question, :rating)
-        end
-      end
-    end
-
-    describe 'POST #vote_up' do
-      it_behaves_like 'a vote method', 'vote_up', 1
-    end
-
-    describe 'POST #vote_down' do
-      it_behaves_like 'a vote method', 'vote_down', -1
-    end
-
-    describe 'POST #reset_vote' do
-      context 'question by other user' do
-        let!(:question) { create(:question) }
-        before { question.vote_up(@user) }
-
-        it 'renders json' do
-          post :reset_vote, params: { id: question.id }, xhr: true
-          expect(response.header['Content-Type']).to include('application/json')
-        end
-
-        it 'returns updated voting info' do
-          post :reset_vote, params: { id: question.id }, xhr: true
-          response_data = JSON.parse(response.body, symbolize_names: true)
-          expect(response_data[:rating]).to eq(0)
-          expect(response_data[:user_vote]).to be_nil
-        end
-
-        it 'updates rating in database' do
-          expect do
-            post :reset_vote, params: { id: question.id }, xhr: true
-          end.to change(question, :rating).by(-1)
-        end
-      end
-
-      context 'question by same user' do
-        let!(:question) { create(:question, user: @user) }
-
-        it 'return 403 Forbidden' do
-          post :reset_vote, params: { id: question.id }, xhr: true
-          expect(response).to have_http_status(403)
-        end
-
-        it 'does not update question rating in database' do
-          expect do
-            post :reset_vote, params: { id: question.id }, xhr: true
-          end.not_to change(question, :rating)
-        end
-      end
-    end
+    it_behaves_like 'votable controller with authenticated user', :question
   end
 end

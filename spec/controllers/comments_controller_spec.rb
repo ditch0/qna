@@ -51,6 +51,12 @@ describe CommentsController do
               post :create, params: valid_comment_params, xhr: true
             end.to change(Comment, :count).by(1)
           end
+
+          it 'publishes comment to ActionCable' do
+            question_id = commentable.is_a?(Question) ? commentable.id : commentable.question_id
+            expect(ActionCable.server).to receive(:broadcast).with("comments_#{question_id}", anything)
+            post :create, params: valid_comment_params, xhr: true
+          end
         end
 
         context 'invalid comment' do
@@ -68,6 +74,11 @@ describe CommentsController do
             expect do
               post :create, params: invalid_comment_params, xhr: true
             end.not_to change(Comment, :count)
+          end
+
+          it 'does not publishe comment to ActionCable' do
+            expect(ActionCable.server).not_to receive(:broadcast)
+            post :create, params: invalid_comment_params, xhr: true
           end
         end
       end
