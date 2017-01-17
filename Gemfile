@@ -46,6 +46,10 @@ gem 'omniauth'
 gem 'omniauth-facebook'
 gem 'omniauth-twitter'
 
+gem 'sidekiq'
+gem 'sinatra', github: 'sinatra', require: nil
+gem 'whenever'
+
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
