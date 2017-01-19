@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161227180732) do
+ActiveRecord::Schema.define(version: 20170119201821) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -102,6 +102,13 @@ ActiveRecord::Schema.define(version: 20161227180732) do
     t.index ["user_id"], name: "index_questions_on_user_id", using: :btree
   end
 
+  create_table "questions_subscriptions", id: false, force: :cascade do |t|
+    t.integer "question_id", null: false
+    t.integer "user_id",     null: false
+    t.index ["question_id"], name: "index_questions_subscriptions_on_question_id", using: :btree
+    t.index ["user_id"], name: "index_questions_subscriptions_on_user_id", using: :btree
+  end
+
   create_table "users", force: :cascade do |t|
     t.datetime "created_at",                          null: false
     t.datetime "updated_at",                          null: false
@@ -136,4 +143,6 @@ ActiveRecord::Schema.define(version: 20161227180732) do
   add_foreign_key "oauth_access_tokens", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_access_tokens", "users", column: "resource_owner_id"
   add_foreign_key "questions", "users"
+  add_foreign_key "questions_subscriptions", "questions"
+  add_foreign_key "questions_subscriptions", "users"
 end

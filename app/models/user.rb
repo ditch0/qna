@@ -8,6 +8,7 @@ class User < ApplicationRecord
   has_many :questions, dependent: :destroy
   has_many :answers, dependent: :destroy
   has_many :authorizations, dependent: :destroy
+  has_and_belongs_to_many :followed_questions, class_name: 'Question', join_table: :questions_subscriptions
 
   def self.find_for_oauth(auth)
     authorization = Authorization.find_by(provider: auth.provider, uid: auth.uid.to_s)
