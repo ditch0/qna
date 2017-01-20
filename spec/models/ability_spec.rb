@@ -23,6 +23,9 @@ describe Ability do
     end
 
     it { should_not be_able_to :set_is_best, create(:answer) }
+
+    it { should_not be_able_to :follow, create(:question) }
+    it { should_not be_able_to :unsubscribe, create(:question) }
   end
 
   context 'authenticated user' do
@@ -34,6 +37,7 @@ describe Ability do
     context 'questions' do
       let(:question) { create(:question, user: user) }
       let(:other_users_question) { create(:question) }
+      let(:followed_question) { create(:question, followers: [user]) }
 
       it { should be_able_to :create, Question }
       it { should be_able_to :update, question, user: user }
@@ -47,6 +51,11 @@ describe Ability do
       it { should_not be_able_to :vote_down, question, user: user }
       it { should be_able_to :reset_vote, other_users_question, user: user }
       it { should_not be_able_to :reset_vote, question, user: user }
+
+      it { should be_able_to :follow, question }
+      it { should_not be_able_to :follow, followed_question }
+      it { should be_able_to :unsubscribe, followed_question }
+      it { should_not be_able_to :unsubscribe, question }
     end
 
     context 'answers' do
