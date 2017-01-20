@@ -9,6 +9,8 @@ class Answer < ApplicationRecord
 
   scope :best_and_newest_order, -> { order(is_best: :desc, id: :desc) }
 
+  after_create :send_emails_to_question_followers
+
   def update_is_best(is_best)
     ActiveRecord::Base.transaction do
       question.answers.update_all(is_best: false)
@@ -18,5 +20,13 @@ class Answer < ApplicationRecord
 
   def user_can_vote?(user)
     user_id != user.id
+  end
+
+  private
+
+  def send_emails_to_question_followers
+    question.followers.each do |user|
+      QuestionsMailer.new_answer(user, self).deliver_later
+    end
   end
 end

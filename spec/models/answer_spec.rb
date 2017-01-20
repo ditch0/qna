@@ -31,4 +31,26 @@ describe Answer, type: :model do
     expect(first_best_answer.is_best).to be_falsey
     expect(next_best_answer.is_best).to be_truthy
   end
+
+  describe 'notifying questions followers' do
+    let!(:user) { create(:user) }
+    let!(:question_follower) { create(:user) }
+    let!(:question) { create(:question, followers: [question_follower]) }
+
+    it 'calls mailer to create mail when answer is created' do
+      allow(QuestionsMailer).to receive_message_chain(:new_answer, :deliver_later)
+      answer = question.answers.create(body: 'A new answer', user_id: user.id)
+      expect(QuestionsMailer).to have_received(:new_answer).with(question_follower, answer)
+    end
+
+    it 'calls mailer to deliver mail' do
+      expect(QuestionsMailer).to receive_message_chain(:new_answer, :deliver_later)
+      question.answers.create(body: 'A new answer', user_id: user.id)
+    end
+
+    it 'does not call mailer to create mail when answer is invalid' do
+      question.answers.create(user_id: user.id)
+      expect(QuestionsMailer).not_to receive(:new_answer)
+    end
+  end
 end
