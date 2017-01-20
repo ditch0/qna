@@ -33,6 +33,9 @@ describe Answer, type: :model do
   end
 
   describe 'notifying questions followers' do
+    before { Question.skip_callback(:create, :after, :add_user_to_followers) }
+    after  { Question.set_callback(:create, :after, :add_user_to_followers) }
+
     let!(:user) { create(:user) }
     let!(:question_follower) { create(:user) }
     let!(:question) { create(:question, followers: [question_follower]) }

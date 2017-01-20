@@ -35,6 +35,9 @@ describe Ability do
     it { should_not be_able_to :manage, :all }
 
     context 'questions' do
+      before { Question.skip_callback(:create, :after, :add_user_to_followers) }
+      after  { Question.set_callback(:create, :after, :add_user_to_followers) }
+
       let(:question) { create(:question, user: user) }
       let(:other_users_question) { create(:question) }
       let(:followed_question) { create(:question, followers: [user]) }
