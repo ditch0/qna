@@ -90,6 +90,36 @@ RSpec.describe QuestionsController, type: :controller do
       end
     end
 
+    describe 'POST #follow' do
+      let!(:question) { create(:question) }
+
+      it 'redirects to login page' do
+        post :follow, params: { id: question.id }
+        expect(response).to redirect_to(new_user_session_url)
+      end
+
+      it 'does not change question followers list' do
+        expect do
+          post :follow, params: { id: question.id }
+        end.not_to change(question.followers, :count)
+      end
+    end
+
+    describe 'POST #unsubscribe' do
+      let!(:question) { create(:question) }
+
+      it 'redirects to login page' do
+        post :unsubscribe, params: { id: question.id }
+        expect(response).to redirect_to(new_user_session_url)
+      end
+
+      it 'does not change question followers list' do
+        expect do
+          post :unsubscribe, params: { id: question.id }
+        end.not_to change(question.followers, :count)
+      end
+    end
+
     it_behaves_like 'votable controller with guest user', :question
   end
 
@@ -273,6 +303,38 @@ RSpec.describe QuestionsController, type: :controller do
             question.reload
           end.not_to change(question, :body)
         end
+      end
+    end
+
+    describe 'POST #follow' do
+      let!(:question) { create(:question) }
+
+      it 'redirects to question page' do
+        post :follow, params: { id: question.id }
+        expect(response).to redirect_to(question_url(question))
+      end
+
+      it 'adds user to followers list' do
+        expect do
+          post :follow, params: { id: question.id }
+          question.reload
+        end.to change(question.followers, :count).by(1)
+      end
+    end
+
+    describe 'POST #unsubscribe' do
+      let!(:question) { create(:question, followers: [@user]) }
+
+      it 'redirects to question page' do
+        post :unsubscribe, params: { id: question.id }
+        expect(response).to redirect_to(question_url(question))
+      end
+
+      it 'removes user from followers list' do
+        expect do
+          post :unsubscribe, params: { id: question.id }
+          question.reload
+        end.to change(question.followers, :count).by(-1)
       end
     end
 

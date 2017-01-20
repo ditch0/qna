@@ -2,7 +2,7 @@ class QuestionsController < ApplicationController
   include CanVote
 
   skip_before_action :authenticate_user!, only: [:index, :show]
-  before_action :set_question, only: [:show, :destroy, :update, :set_best_answer]
+  before_action :set_question, only: [:show, :destroy, :update, :set_best_answer, :follow, :unsubscribe]
   before_action :add_data_to_gon, only: [:show]
   after_action :publish_question, only: [:create]
 
@@ -34,6 +34,16 @@ class QuestionsController < ApplicationController
 
   def update
     respond_with @question.update(question_params)
+  end
+
+  def follow
+    @question.followers << current_user
+    redirect_to @question
+  end
+
+  def unsubscribe
+    @question.followers.destroy(current_user)
+    redirect_to @question
   end
 
   private

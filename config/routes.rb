@@ -19,6 +19,7 @@ Rails.application.routes.draw do
 
   resources :questions, only: [:new, :create, :index, :show, :destroy, :update] do
     concerns [:votable, :commentable]
+    post :follow, :unsubscribe, on: :member
     resources :answers, shallow: true, only: [:new, :create, :destroy, :update] do
       concerns [:votable, :commentable]
       post :set_is_best, on: :member
