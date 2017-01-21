@@ -11,9 +11,18 @@ p= question.body
         - if can?(:update, question)
           = delete_attachment_link(attachment)
 
+- if can?(:follow, question)
+  p
+    = button_to 'Follow', follow_question_path(question), method: :post
+
+- if can?(:unsubscribe, question)
+  p
+    = button_to 'Unsubscribe', unsubscribe_question_path(question), method: :post
+
 - if can?(:destroy, question)
   p
     = button_to 'Delete question', question_path(question), method: :delete
+
 - if can?(:update, question)
   p
     = button_tag 'Edit question', type: :button, class: 'edit-question-button'

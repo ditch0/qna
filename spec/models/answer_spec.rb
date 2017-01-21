@@ -31,4 +31,20 @@ describe Answer, type: :model do
     expect(first_best_answer.is_best).to be_falsey
     expect(next_best_answer.is_best).to be_truthy
   end
+
+  describe 'notifying questions followers' do
+    let!(:user) { create(:user) }
+    let!(:question) { create(:question) }
+
+    it 'notifies question followers when answer is created' do
+      allow(QuestionFollowersNotificationJob).to receive(:perform_later)
+      answer = question.answers.create(body: 'A new answer', user_id: user.id)
+      expect(QuestionFollowersNotificationJob).to have_received(:perform_later).with(answer)
+    end
+
+    it 'does not notify question followers when answer is invalid' do
+      expect(QuestionFollowersNotificationJob).not_to receive(:perform_later)
+      question.answers.create(user_id: user.id)
+    end
+  end
 end

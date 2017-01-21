@@ -15,6 +15,9 @@ feature 'User can create question' do
 
     expect(page).to have_current_path(questions_path)
     expect(page).to have_content(question[:title])
+
+    click_on question[:title]
+    expect(page).to have_button('Unsubscribe')
   end
 
   scenario 'unauthorized user is redirected to login page' do
