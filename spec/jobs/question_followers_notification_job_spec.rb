@@ -1,12 +1,10 @@
 require 'rails_helper'
 
 describe QuestionFollowersNotificationJob, type: :job do
-  before { Question.skip_callback(:create, :after, :add_user_to_followers) }
-  after  { Question.set_callback(:create, :after, :add_user_to_followers) }
-
   let!(:question_follower) { create(:user) }
-  let!(:question) { create(:question, followers: [question_follower]) }
+  let!(:question) { create(:question) }
   let!(:new_answer) { create(:answer, question: question) }
+  before { question.followers = [question_follower] }
 
   it 'calls mailer to create mail' do
     allow(QuestionsMailer).to receive_message_chain(:new_answer, :deliver_later)
