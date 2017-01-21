@@ -8,7 +8,8 @@ class Question < ApplicationRecord
 
   has_many :answers, dependent: :destroy
   belongs_to :user
-  has_and_belongs_to_many :followers, class_name: 'User', join_table: :questions_subscriptions
+  has_many :question_subscriptions, dependent: :destroy
+  has_many :followers, through: :question_subscriptions, source: :user
 
   after_create :add_user_to_followers
 

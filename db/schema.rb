@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170119201821) do
+ActiveRecord::Schema.define(version: 20170121102808) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -93,6 +93,16 @@ ActiveRecord::Schema.define(version: 20170119201821) do
     t.index ["uid"], name: "index_oauth_applications_on_uid", unique: true, using: :btree
   end
 
+  create_table "question_subscriptions", force: :cascade do |t|
+    t.integer  "user_id"
+    t.integer  "question_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.index ["question_id"], name: "index_question_subscriptions_on_question_id", using: :btree
+    t.index ["user_id", "question_id"], name: "index_question_subscriptions_on_user_id_and_question_id", unique: true, using: :btree
+    t.index ["user_id"], name: "index_question_subscriptions_on_user_id", using: :btree
+  end
+
   create_table "questions", force: :cascade do |t|
     t.string   "title",      null: false
     t.text     "body",       null: false
@@ -100,13 +110,6 @@ ActiveRecord::Schema.define(version: 20170119201821) do
     t.datetime "updated_at", null: false
     t.integer  "user_id"
     t.index ["user_id"], name: "index_questions_on_user_id", using: :btree
-  end
-
-  create_table "questions_subscriptions", id: false, force: :cascade do |t|
-    t.integer "question_id", null: false
-    t.integer "user_id",     null: false
-    t.index ["question_id"], name: "index_questions_subscriptions_on_question_id", using: :btree
-    t.index ["user_id"], name: "index_questions_subscriptions_on_user_id", using: :btree
   end
 
   create_table "users", force: :cascade do |t|
@@ -142,7 +145,7 @@ ActiveRecord::Schema.define(version: 20170119201821) do
   add_foreign_key "oauth_access_grants", "users", column: "resource_owner_id"
   add_foreign_key "oauth_access_tokens", "oauth_applications", column: "application_id"
   add_foreign_key "oauth_access_tokens", "users", column: "resource_owner_id"
+  add_foreign_key "question_subscriptions", "questions"
+  add_foreign_key "question_subscriptions", "users"
   add_foreign_key "questions", "users"
-  add_foreign_key "questions_subscriptions", "questions"
-  add_foreign_key "questions_subscriptions", "users"
 end
