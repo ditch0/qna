@@ -7,6 +7,7 @@ class User < ApplicationRecord
 
   has_many :questions, dependent: :destroy
   has_many :answers, dependent: :destroy
+  has_many :comments, dependent: :destroy
   has_many :authorizations, dependent: :destroy
   has_many :question_subscriptions, dependent: :destroy
   has_many :followed_questions, through: :question_subscriptions, source: :question

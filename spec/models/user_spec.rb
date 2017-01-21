@@ -4,6 +4,7 @@ describe User, type: :model do
   describe 'relations' do
     it { should have_many(:questions).dependent(:destroy) }
     it { should have_many(:answers).dependent(:destroy) }
+    it { should have_many(:comments).dependent(:destroy) }
     it { should have_many(:authorizations).dependent(:destroy) }
     it { should have_many(:question_subscriptions).dependent(:destroy) }
     it { should have_many(:followed_questions) }
