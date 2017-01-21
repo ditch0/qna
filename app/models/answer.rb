@@ -9,7 +9,7 @@ class Answer < ApplicationRecord
 
   scope :best_and_newest_order, -> { order(is_best: :desc, id: :desc) }
 
-  after_create :send_emails_to_question_followers
+  after_commit :send_emails_to_question_followers, on: :create
 
   def update_is_best(is_best)
     ActiveRecord::Base.transaction do
