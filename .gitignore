@@ -31,3 +31,6 @@
 /config/secrets.yml
 
 /.rubocop_todo.yml
+
+db/sphinx
+config/*.sphinx.conf
