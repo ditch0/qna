@@ -33,27 +33,18 @@ describe Answer, type: :model do
   end
 
   describe 'notifying questions followers' do
-    before { Question.skip_callback(:create, :after, :add_user_to_followers) }
-    after  { Question.set_callback(:create, :after, :add_user_to_followers) }
-
     let!(:user) { create(:user) }
-    let!(:question_follower) { create(:user) }
-    let!(:question) { create(:question, followers: [question_follower]) }
+    let!(:question) { create(:question) }
 
-    it 'calls mailer to create mail when answer is created' do
-      allow(QuestionsMailer).to receive_message_chain(:new_answer, :deliver_later)
+    it 'notifies question followers when answer is created' do
+      allow(QuestionFollowersNotificationJob).to receive(:perform_later)
       answer = question.answers.create(body: 'A new answer', user_id: user.id)
-      expect(QuestionsMailer).to have_received(:new_answer).with(question_follower, answer)
+      expect(QuestionFollowersNotificationJob).to have_received(:perform_later).with(answer)
     end
 
-    it 'calls mailer to deliver mail' do
-      expect(QuestionsMailer).to receive_message_chain(:new_answer, :deliver_later)
-      question.answers.create(body: 'A new answer', user_id: user.id)
-    end
-
-    it 'does not call mailer to create mail when answer is invalid' do
+    it 'does not notify question followers when answer is invalid' do
+      expect(QuestionFollowersNotificationJob).not_to receive(:perform_later)
       question.answers.create(user_id: user.id)
-      expect(QuestionsMailer).not_to receive(:new_answer)
     end
   end
 end
