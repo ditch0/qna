@@ -25,7 +25,7 @@ class Answer < ApplicationRecord
   private
 
   def send_emails_to_question_followers
-    question.followers.each do |user|
+    question.followers.find_each do |user|
       QuestionsMailer.new_answer(user, self).deliver_later
     end
   end
