@@ -18,6 +18,5 @@ h3 Recent comment
 ul.comments
   - @user.comments.order(created_at: :desc).limit(10).each do |comment|
     li
-      - question = comment.commentable.is_a?(Question) ? comment.commentable : comment.commentable.question
-      = link_to(question.title, question)
+      = comment_question_link(comment)
       p= comment.body
