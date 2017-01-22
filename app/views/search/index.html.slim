@@ -1,0 +1,18 @@
+- if @results.empty?
+  p Nothing is found
+- else
+  ol
+    - @results.each do |item|
+      li
+        - case item
+          - when Question
+            = link_to item.title, question_path(item)
+            p= item.body
+          - when Answer
+            = link_to item.question.title, question_path(item.question)
+            p= item.body
+          - when Comment
+            = comment_question_link(item)
+            p= item.body
+          - when User
+            = link_to item.email, user_path(item)

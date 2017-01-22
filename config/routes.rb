@@ -28,6 +28,8 @@ Rails.application.routes.draw do
 
   resources :users, only: [:show]
 
+  get '/search/index', to: 'search#index', as: 'search'
+
   namespace :api do
     namespace :v1 do
       resources :profiles, only: [:index] do
