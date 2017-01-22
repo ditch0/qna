@@ -4,5 +4,5 @@
       = label_tag :query, 'Search'
       = text_field_tag :query
       = label_tag :class, 'in'
-      = select_tag :class, options_for_select(%w{Question Answer Comment User}.map { |c| [c.pluralize, c]}), prompt: '-'
+      = select_tag :class, options_for_select(SearchService::SEARCH_CLASSES.map { |c| [c.to_s.pluralize, c]}), prompt: '-'
       = submit_tag 'Find'
