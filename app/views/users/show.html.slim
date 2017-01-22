@@ -1,0 +1,22 @@
+h2= @user.email
+
+h3 Recent questions
+ul.questions
+  - @user.questions.order(created_at: :desc).limit(10).each do |question|
+    li
+      = link_to(question.title, question)
+      p= question.body
+
+h3 Recent answers
+ul.answers
+  - @user.answers.order(created_at: :desc).limit(10).each do |answer|
+    li
+      = link_to(answer.question.title, answer.question)
+      p= answer.body
+
+h3 Recent comment
+ul.comments
+  - @user.comments.order(created_at: :desc).limit(10).each do |comment|
+    li
+      = comment_question_link(comment)
+      p= comment.body

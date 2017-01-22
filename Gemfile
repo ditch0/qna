@@ -50,6 +50,9 @@ gem 'sidekiq'
 gem 'sinatra', github: 'sinatra', require: nil
 gem 'whenever'
 
+gem 'thinking-sphinx'
+gem 'mysql2'
+
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 

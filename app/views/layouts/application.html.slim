@@ -11,6 +11,7 @@ html
   body[class="#{controller_name}-#{action_name}"]
     - if user_signed_in?
       p =link_to 'Sign out', destroy_user_session_path, method: :delete
+    = render 'shared/search_form'
     p.notice= notice
     p.alert= alert
     = yield
