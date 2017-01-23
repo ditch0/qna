@@ -82,6 +82,11 @@ group :development do
   gem 'guard-rails', require: false
   gem 'guard-spring', require: false
   gem 'letter_opener'
+
+  gem 'capistrano', require: false
+  gem 'capistrano-bundler', require: false
+  gem 'capistrano-rails', require: false
+  gem 'capistrano-rbenv', require: false
 end
 
 group :test do
