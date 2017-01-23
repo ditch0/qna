@@ -56,6 +56,8 @@ gem 'mysql2'
 gem 'dotenv'
 gem 'dotenv-deployment', require: 'dotenv/deployment'
 
+gem 'therubyracer'
+
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
