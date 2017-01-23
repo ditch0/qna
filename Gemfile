@@ -53,6 +53,9 @@ gem 'whenever'
 gem 'thinking-sphinx'
 gem 'mysql2'
 
+gem 'dotenv'
+gem 'dotenv-deployment', require: 'dotenv/deployment'
+
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
