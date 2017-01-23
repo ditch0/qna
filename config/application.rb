@@ -31,6 +31,5 @@ module Qna
     ActiveModelSerializers.config.adapter = :json
 
     config.autoload_paths += %W(#{config.root}/app/services)
-    Spring.watch 'app/services/**'
   end
 end
