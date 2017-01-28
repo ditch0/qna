@@ -14,4 +14,10 @@ module ApplicationHelper
                end
     link_to question.title, question_path(question)
   end
+
+  def collection_cache_key_for(model)
+    klass = model.to_s.capitalize.constantize
+    max_updated_at = klass.maximum(:updated_at).try(:utc).try(:to_s, :number)
+    "#{model.to_s.pluralize}/collection-#{klass.count}-#{max_updated_at}"
+  end
 end
