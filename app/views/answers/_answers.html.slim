@@ -1,4 +1,4 @@
 - if answers.count > 0
-  - cache_unless user_signed_in?, collection_cache_key_for(:answer, answers.first.question) do
+  - cache_unless user_signed_in?, answers do
     - answers.each do |answer|
       = render 'answers/answer', answer: answer

@@ -3,7 +3,7 @@ div id="answer-#{answer.id}" class=(answer.is_best ? 'answer best-answer' : 'ans
 
   = render 'shared/rating_block', votable: answer
 
-  - cache_unless user_signed_in?, collection_cache_key_for(:attachment, answer) do
+  - cache_unless user_signed_in?, answer.attachments do
     - if answer.attachments.exists?
       ul.attachments
         - answer.attachments.each do |attachment|

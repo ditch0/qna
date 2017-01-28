@@ -3,7 +3,7 @@ p= question.body
 
 = render 'shared/rating_block', votable: question
 
-- cache_unless user_signed_in?, collection_cache_key_for(:attachment, question) do
+- cache_unless user_signed_in?, question.attachments do
   - if question.attachments.exists?
     ul.attachments
       - question.attachments.each do |attachment|

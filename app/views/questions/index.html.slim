@@ -1,5 +1,5 @@
 = button_to 'Ask question', new_question_path, method: :get
-- cache collection_cache_key_for(:question) do
+- cache @questions do
   .questions-list
     - @questions.each do |question|
       = render 'question', question: question
