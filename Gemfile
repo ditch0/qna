@@ -54,7 +54,7 @@ gem 'thinking-sphinx'
 gem 'mysql2'
 
 gem 'dotenv'
-gem 'dotenv-deployment', require: 'dotenv/deployment'
+gem 'dotenv-rails'
 
 gem 'therubyracer'
 gem 'unicorn'
