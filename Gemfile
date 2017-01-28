@@ -75,6 +75,7 @@ group :development, :test do
   gem 'pry-rails'
   gem 'pry-byebug'
   gem 'with_model'
+  gem 'parallel_tests'
 end
 
 group :development do

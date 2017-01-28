@@ -7,7 +7,7 @@ RSpec.configure do |config|
 
   Capybara.javascript_driver = :poltergeist
   Capybara.server = :puma
-  Capybara.server_port = 3030
+  Capybara.server_port = 3030 + ENV['TEST_ENV_NUMBER'].to_i
 
   config.before(:suite) do
     DatabaseCleaner.clean_with(:truncation)
