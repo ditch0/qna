@@ -47,7 +47,7 @@ gem 'omniauth-facebook'
 gem 'omniauth-twitter'
 
 gem 'sidekiq'
-gem 'sinatra', github: 'sinatra', require: nil
+gem 'sinatra', git: 'https://github.com/sinatra/sinatra.git', require: false
 gem 'whenever'
 
 gem 'thinking-sphinx'
