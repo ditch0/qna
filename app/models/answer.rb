@@ -5,7 +5,7 @@ class Answer < ApplicationRecord
 
   validates :body, presence: true
   belongs_to :user
-  belongs_to :question
+  belongs_to :question, touch: true
 
   scope :best_and_newest_order, -> { order(is_best: :desc, id: :desc) }
 

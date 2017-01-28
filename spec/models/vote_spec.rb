@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe Vote, type: :model do
   describe 'relations' do
-    it { should belong_to(:votable) }
+    it { should belong_to(:votable).touch(true) }
     it { should belong_to(:user) }
   end
 
