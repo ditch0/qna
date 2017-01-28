@@ -1,7 +1,8 @@
 = button_to 'Ask question', new_question_path, method: :get
-.questions-list
-  - @questions.each do |question|
-    = render 'question', question: question
+- cache collection_cache_key_for(:question) do
+  .questions-list
+    - @questions.each do |question|
+      = render 'question', question: question
 
 = content_for :scripts
   = javascript_include_tag 'questions-index'
