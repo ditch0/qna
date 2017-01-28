@@ -3,13 +3,14 @@ p= question.body
 
 = render 'shared/rating_block', votable: question
 
-- if question.attachments.exists?
-  ul.attachments
-    - question.attachments.each do |attachment|
-      li
-        = link_to attachment.file.identifier, attachment.file.url
-        - if can?(:update, question)
-          = delete_attachment_link(attachment)
+- cache_unless user_signed_in?, question.attachments do
+  - if question.attachments.exists?
+    ul.attachments
+      - question.attachments.each do |attachment|
+        li
+          = link_to attachment.file.identifier, attachment.file.url
+          - if can?(:update, question)
+            = delete_attachment_link(attachment)
 
 - if can?(:follow, question)
   p

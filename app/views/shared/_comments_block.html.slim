@@ -1,8 +1,9 @@
-.comments-block
-  h3 Comments
-  ul.comments
-    - commentable.comments.each do |comment|
-      li= comment.body
+- cache_unless user_signed_in?, commentable.comments do
+  .comments-block
+    h3 Comments
+    ul.comments
+      - commentable.comments.each do |comment|
+        li= comment.body
 
-  - if can?(:create, Comment)
-    = render 'comments/form', commentable: commentable
+    - if can?(:create, Comment)
+      = render 'comments/form', commentable: commentable

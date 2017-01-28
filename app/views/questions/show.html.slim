@@ -1,9 +1,10 @@
-.question-block
-  = render 'question_block', question: @question
+- cache_unless user_signed_in?, @question do
+  .question-block
+    = render 'question_block', question: @question
 
-h3 Answers
-.answers-block
-  = render 'answers/answers', answers: @question.answers.best_and_newest_order
+  h3 Answers
+  .answers-block
+    = render 'answers/answers', answers: @question.answers.best_and_newest_order
 
 - if can?(:create, Answer)
   = render 'answers/form', answer: @question.answers.build

@@ -1,2 +1,4 @@
-- answers.each do |answer|
-  = render 'answers/answer', answer: answer
+- if answers.count > 0
+  - cache_unless user_signed_in?, answers do
+    - answers.each do |answer|
+      = render 'answers/answer', answer: answer

@@ -3,13 +3,14 @@ div id="answer-#{answer.id}" class=(answer.is_best ? 'answer best-answer' : 'ans
 
   = render 'shared/rating_block', votable: answer
 
-  - if answer.attachments.exists?
-    ul.attachments
-      - answer.attachments.each do |attachment|
-        li
-          = link_to attachment.file.identifier, attachment.file.url
-          - if can?(:update, answer)
-            = delete_attachment_link(attachment)
+  - cache_unless user_signed_in?, answer.attachments do
+    - if answer.attachments.exists?
+      ul.attachments
+        - answer.attachments.each do |attachment|
+          li
+            = link_to attachment.file.identifier, attachment.file.url
+            - if can?(:update, answer)
+              = delete_attachment_link(attachment)
 
   - if can?(:set_is_best, answer) && !answer.is_best
     = best_answer_button(answer)
