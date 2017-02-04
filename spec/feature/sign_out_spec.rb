@@ -5,7 +5,9 @@ feature 'Sign out' do
   background { sign_in user }
 
   scenario 'user signs out' do
+    visit questions_path
     click_on 'Sign out'
+
     expect(page).to have_content('Signed out successfully.')
   end
 end

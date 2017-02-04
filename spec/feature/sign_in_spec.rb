@@ -1,16 +1,24 @@
 require_relative 'feature_helper'
 
 feature 'Sign in' do
-  given!(:valid_user) { create(:user) }
-  given!(:invalid_user) { build(:user) }
+  shared_examples_for 'signing in' do |result_message|
+    scenario 'user signs in' do
+      visit new_user_session_path
+      fill_in 'Email',    with: user.email
+      fill_in 'Password', with: user.password
+      click_on 'Log in'
 
-  scenario 'user signs in with valid credentials' do
-    sign_in(valid_user)
-    expect(page).to have_content('Signed in successfully.')
+      expect(page).to have_content(result_message)
+    end
   end
 
-  scenario 'user signs in with invalid credentials' do
-    sign_in(invalid_user)
-    expect(page).to have_content('Invalid Email or password.')
+  context 'valid user' do
+    given!(:user) { create(:user) }
+    it_behaves_like 'signing in', 'Signed in successfully.'
+  end
+
+  context 'invalid user' do
+    given!(:user) { build(:user) }
+    it_behaves_like 'signing in', 'Invalid Email or password.'
   end
 end
