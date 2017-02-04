@@ -123,6 +123,8 @@ GEM
     connection_pool (2.2.1)
     database_cleaner (1.5.3)
     debug_inspector (0.0.2)
+    dev_log_in (1.1.0)
+      rails (>= 3.0.0)
     devise (4.2.0)
       bcrypt (~> 3.0)
       orm_adapter (~> 0.1)
@@ -465,6 +467,7 @@ DEPENDENCIES
   cocoon
   coffee-rails (~> 4.2)
   database_cleaner
+  dev_log_in
   devise
   doorkeeper
   dotenv

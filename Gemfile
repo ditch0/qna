@@ -106,6 +106,7 @@ group :test do
   gem 'orderly'
   gem 'json_spec'
   gem 'rack_session_access'
+  gem 'dev_log_in'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

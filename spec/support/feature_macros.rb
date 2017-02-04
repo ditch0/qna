@@ -42,4 +42,20 @@ module FeatureMacros
       }
     )
   end
+
+  def visit_server(user: nil, wait: 2)
+    url = "http://#{Capybara.server_host}:#{Capybara.server_port}"
+    url += "/dev/log_in/#{user.id}" if user.present?
+
+    $stdout.puts "Visiting server on #{url}"
+    Launchy.open(url)
+
+    if wait.zero?
+      $stdout.puts 'Press any key to continue.'
+      $stdin.gets
+      $stdout.puts 'Done.'
+    else
+      sleep wait
+    end
+  end
 end
