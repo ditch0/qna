@@ -1,5 +1,6 @@
 require 'rails_helper'
 require 'capybara/poltergeist'
+require_relative 'screenshots_helper' unless Nenv.disable_screenshots?
 
 RSpec.configure do |config|
   config.use_transactional_fixtures = false
