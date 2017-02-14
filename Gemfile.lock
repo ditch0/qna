@@ -1,4 +1,12 @@
 GIT
+  remote: https://github.com/mattheworiordan/capybara-screenshot.git
+  revision: fe47a6816677d573fd5428dae60a31bc8898f623
+  specs:
+    capybara-screenshot (1.0.14)
+      capybara (>= 1.0, < 3)
+      launchy
+
+GIT
   remote: https://github.com/sinatra/sinatra.git
   revision: 6835f4e21cf0f6c1e9a18a5106363b679a9d7e22
   specs:
@@ -463,6 +471,7 @@ DEPENDENCIES
   capistrano-sidekiq
   capistrano3-unicorn
   capybara
+  capybara-screenshot!
   carrierwave
   cocoon
   coffee-rails (~> 4.2)
@@ -485,6 +494,7 @@ DEPENDENCIES
   letter_opener
   listen (~> 3.0.5)
   mysql2
+  nenv
   oj
   oj_mimic_json
   omniauth
