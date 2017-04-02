@@ -107,6 +107,8 @@ group :test do
   gem 'json_spec'
   gem 'rack_session_access'
   gem 'dev_log_in'
+  gem 'capybara-screenshot', git: 'https://github.com/mattheworiordan/capybara-screenshot.git'
+  gem 'nenv'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
