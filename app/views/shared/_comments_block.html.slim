@@ -5,5 +5,5 @@
       - commentable.comments.each do |comment|
         li= comment.body
 
-    - if can?(:create, Comment)
+    - if policy(Comment).create?
       = render 'comments/form', commentable: commentable

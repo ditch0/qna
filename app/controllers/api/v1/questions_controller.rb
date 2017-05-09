@@ -1,10 +1,11 @@
 module Api
   module V1
     class QuestionsController < Api::V1::ApiController
-      load_and_authorize_resource
+      before_action :set_question, only: :show
 
       def index
-        respond_with @questions
+        authorize Question
+        respond_with Question.all
       end
 
       def show
@@ -12,6 +13,7 @@ module Api
       end
 
       def create
+        authorize Question
         respond_with current_resource_owner.questions.create(question_params)
       end
 
@@ -19,6 +21,11 @@ module Api
 
       def question_params
         params.require(:question).permit(:title, :body)
+      end
+
+      def set_question
+        @question = Question.find(params[:id])
+        authorize @question
       end
     end
   end

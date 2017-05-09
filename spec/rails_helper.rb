@@ -7,7 +7,6 @@ require 'spec_helper'
 require 'rspec/rails'
 require 'shoulda_matchers_helper'
 require 'with_model'
-require 'cancan/matchers'
 
 # Add additional requires below this line. Rails is not loaded until this point!
 

@@ -2,9 +2,7 @@ module CanVote
   extend ActiveSupport::Concern
 
   included do
-    voting_actions = [:vote_up, :vote_down, :reset_vote]
-    before_action :set_voteable, only: voting_actions
-    authorize_resource instance_name: :votable, only: voting_actions
+    before_action :set_voteable, only: [:vote_up, :vote_down, :reset_vote]
   end
 
   def vote_up
@@ -26,6 +24,7 @@ module CanVote
 
   def set_voteable
     @votable = model_klass.find(params[:id])
+    authorize @votable
   end
 
   def model_klass
