@@ -73,7 +73,6 @@ GEM
     bindex (0.5.0)
     builder (3.2.3)
     byebug (9.0.6)
-    capistrano (3.8.0)
     capistrano (3.8.1)
       airbrussh (>= 1.0.0)
       i18n
@@ -494,8 +493,8 @@ DEPENDENCIES
   poltergeist
   pry-byebug
   pry-rails
-  pundit
   puma (~> 3.7)
+  pundit
   rack_session_access
   rails (~> 5.1.0)
   rails-controller-testing
