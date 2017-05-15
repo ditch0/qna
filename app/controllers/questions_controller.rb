@@ -6,12 +6,11 @@ class QuestionsController < ApplicationController
   before_action :add_data_to_gon, only: [:show]
   after_action :publish_question, only: [:create]
 
-  authorize_resource
-
   respond_to :html
   respond_to :js, only: :update
 
   def index
+    authorize Question
     respond_with(@questions = Question.all)
   end
 
@@ -20,10 +19,12 @@ class QuestionsController < ApplicationController
   end
 
   def new
+    authorize Question
     respond_with(@question = Question.new)
   end
 
   def create
+    authorize Question
     @question = current_user.questions.create(question_params)
     respond_with @question, location: questions_url
   end
@@ -54,6 +55,7 @@ class QuestionsController < ApplicationController
 
   def set_question
     @question = Question.find(params[:id])
+    authorize @question
   end
 
   def add_data_to_gon

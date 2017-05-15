@@ -1,10 +1,11 @@
 module Api
   module V1
     class AnswersController < Api::V1::ApiController
-      load_and_authorize_resource
+      before_action :set_answer, only: :show
 
       def index
-        respond_with @answers
+        authorize Answer
+        respond_with Answer.where(question_id: params[:question_id]).order(:created_at)
       end
 
       def show
@@ -12,6 +13,7 @@ module Api
       end
 
       def create
+        authorize Answer
         answer = current_resource_owner.answers.create(answer_params.merge(question_id: params[:question_id]))
         respond_with answer
       end
@@ -20,6 +22,11 @@ module Api
 
       def answer_params
         params.require(:answer).permit(:body)
+      end
+
+      def set_answer
+        @answer = Answer.find(params[:id])
+        authorize @answer
       end
     end
   end

@@ -1,6 +1,5 @@
 class UsersController < ApplicationController
   skip_before_action :authenticate_user!, only: [:show]
-  authorize_resource
   respond_to :html
   before_action :set_user
 
@@ -12,5 +11,6 @@ class UsersController < ApplicationController
 
   def set_user
     @user = User.find(params[:id])
+    authorize @user
   end
 end

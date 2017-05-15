@@ -6,7 +6,7 @@
   .answers-block
     = render 'answers/answers', answers: @question.answers.best_and_newest_order
 
-- if can?(:create, Answer)
+- if policy(Answer).create?
   = render 'answers/form', answer: @question.answers.build
 
 = content_for :scripts

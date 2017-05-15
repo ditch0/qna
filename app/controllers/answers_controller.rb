@@ -4,15 +4,15 @@ class AnswersController < ApplicationController
   before_action :set_answer, only: [:destroy, :update, :set_is_best]
   after_action :publish_answer, only: :create
 
-  authorize_resource
-
   respond_to :js
 
   def new
+    authorize Answer
     respond_with(@answer = Answer.new)
   end
 
   def create
+    authorize Answer
     @answer = current_user.answers.create(answer_params.merge(question_id: params[:question_id]))
     respond_with(@answer)
   end
@@ -40,6 +40,7 @@ class AnswersController < ApplicationController
 
   def set_answer
     @answer = Answer.find(params[:id])
+    authorize @answer
   end
 
   def publish_answer

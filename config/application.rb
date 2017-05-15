@@ -33,6 +33,6 @@ module Qna
 
     ActiveModelSerializers.config.adapter = :json
 
-    config.autoload_paths += %W(#{config.root}/app/services)
+    config.autoload_paths += %W(#{config.root}/app/services #{config.root}/app/policies)
   end
 end

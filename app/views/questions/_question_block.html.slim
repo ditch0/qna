@@ -9,22 +9,22 @@ p= question.body
       - question.attachments.each do |attachment|
         li
           = link_to attachment.file.identifier, attachment.file.url
-          - if can?(:update, question)
+          - if policy(question).update?
             = delete_attachment_link(attachment)
 
-- if can?(:follow, question)
+- if policy(question).follow?
   p
     = button_to 'Follow', follow_question_path(question), method: :post
 
-- if can?(:unsubscribe, question)
+- if policy(question).unsubscribe?
   p
     = button_to 'Unsubscribe', unsubscribe_question_path(question), method: :post
 
-- if can?(:destroy, question)
+- if policy(question).destroy?
   p
     = button_to 'Delete question', question_path(question), method: :delete
 
-- if can?(:update, question)
+- if policy(question).update?
   p
     = button_tag 'Edit question', type: :button, class: 'edit-question-button'
   = render 'form', question: question, remote: true

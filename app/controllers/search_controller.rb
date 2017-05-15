@@ -1,6 +1,6 @@
 class SearchController < ApplicationController
   skip_before_action :authenticate_user!, only: [:index]
-  skip_authorization_check
+  skip_after_action :verify_authorized
 
   respond_to :html
 
