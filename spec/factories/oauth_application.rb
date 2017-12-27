@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :oauth_application, class: Doorkeeper::Application do
     name 'Test app'
     uid '1234567890'
